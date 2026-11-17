@@ -47,14 +47,19 @@
     }, extra || {}));
   }
 
-  function media(p, ci = 0, view = 0, bg) {
+  // big = true usa la foto en alta resolución (ficha de producto / zoom)
+  function media(p, ci = 0, view = 0, bg, big) {
     const c = p.colors[ci] || p.colors[0];
     if (c.img && c.img.length) {
-      const src = c.img[view % c.img.length];
-      return `<img src="${src}" alt="${esc(p.brandName + ' ' + p.name + ' ' + c.name)}" loading="lazy">`;
+      const i = view % c.img.length;
+      const src = big || !c.thumb ? c.img[i] : c.thumb[i];
+      return `<img src="${src}" alt="${esc(p.brandName + ' ' + p.name + ' ' + c.name + ' · vista ' + (i + 1))}" loading="lazy" decoding="async">`;
     }
     return Art.render(p.art, c, view, bg);
   }
+  // Segunda imagen al pasar el mouse: 2ª foto real o vista 3/4 de la ilustración
+  const altView = (p, ci = 0) => ((p.colors[ci] || p.colors[0]).img ? 1 : 3);
+  const views = (p, ci) => { const c = p.colors[ci] || p.colors[0]; return c.img && c.img.length ? c.img.map((_, i) => i) : [0, 1, 2, 3]; };
 
   const icons = {
     heart: '<svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9-9.5C2 7 4.3 4.5 7.2 4.5c2 0 3.6 1.2 4.8 2.9 1.2-1.7 2.8-2.9 4.8-2.9 2.9 0 5.2 2.5 4.2 6C19.5 15.4 12 20 12 20z"/></svg>',
@@ -250,13 +255,14 @@
       p.tags.includes('bestseller') ? '<span class="tag-b tag-b--hot">Top ventas</span>' : ''
     ].join('');
     const meta = `${p.cat === 'tenis' ? 'Tenis ' + sportName(p.sport).toLowerCase() : subName(p.sub)}${p.gender === 'hombre' ? ' · Hombre' : ''}`;
-    return `<article class="card" data-card="${p.id}">
+    return `<article class="card" data-card="${p.id}"><div class="card__top">
       <a class="card__media" href="#/p/${p.slug}" aria-label="${esc(p.brandName + ' ' + p.name)}">
-        <div class="main">${media(p, 0, 0)}</div><div class="alt">${media(p, 0, 3)}</div>
+        <div class="main">${media(p, 0, 0)}</div><div class="alt">${media(p, 0, altView(p))}</div>
       </a>
       <div class="card__badges">${badges}</div>
       <button class="card__wish ${wish.includes(p.id) ? 'is-on' : ''}" data-wish="${p.id}" aria-label="Agregar a favoritos">${icons.heart}</button>
       <div class="card__quick"><button class="btn" data-quick="${p.id}">Compra rápida</button></div>
+      </div>
       <div class="card__body">
         ${p.price >= FREE_SHIP ? `<span class="card__ship">${icons.truck.replace('<svg', '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"')} Envío gratis</span>` : ''}
         <span class="card__brand">${esc(p.brandName)}</span>
@@ -653,6 +659,7 @@
     if (!el) { el = document.createElement('script'); el.type = 'application/ld+json'; el.id = 'ld-product'; document.head.appendChild(el); }
     el.textContent = JSON.stringify({
       '@context': 'https://schema.org', '@type': 'Product', name: `${p.brandName} ${p.name}`, sku: p.id,
+      image: (p.colors[0].img || []).map((u) => new URL(u, location.href).href),
       brand: { '@type': 'Brand', name: p.brandName }, description: p.desc,
       aggregateRating: { '@type': 'AggregateRating', ratingValue: p.rating.toFixed(1), reviewCount: p.reviews },
       offers: { '@type': 'Offer', priceCurrency: 'COP', price: p.price, availability: 'https://schema.org/InStock', itemCondition: 'https://schema.org/NewCondition' }
@@ -674,10 +681,10 @@
       <nav class="crumbs"><a href="#/">Inicio</a> / <a href="#/tienda?gender=${p.gender}">${GENDERS[p.gender]}</a> / <a href="#/tienda?gender=${p.gender}&sub=${p.sub}">${subName(p.sub)}</a></nav>
       <div class="pdp">
         <div>
-          <div class="gallery" id="gallery">
-            ${[0, 1, 2, 3].map((v) => `<div class="gallery__item" data-zoom="${v}">${media(p, ci, v)}</div>`).join('')}
+          <div class="gallery ${views(p, ci).length % 2 ? 'gallery--odd' : ''}" id="gallery">
+            ${views(p, ci).map((v) => `<div class="gallery__item" data-zoom="${v}">${media(p, ci, v, null, true)}</div>`).join('')}
           </div>
-          <div class="gallery__dots" id="gdots">${[0, 1, 2, 3].map((v) => `<i class="${v ? '' : 'is-on'}"></i>`).join('')}</div>
+          <div class="gallery__dots" id="gdots">${views(p, ci).map((v) => `<i class="${v ? '' : 'is-on'}"></i>`).join('')}</div>
         </div>
         <div class="buy">
           <div>
@@ -767,7 +774,7 @@
       $$('[data-size-pick]').forEach((x) => x.classList.toggle('is-on', x === b));
       $('#sizes').classList.remove('is-error');
       const st = p.stock[size];
-      $('#sizeMsg').innerHTML = st <= 2 ? `<p class="stock-msg" style="margin-top:8px">🔥 ¡Últimas ${st} unidades en talla ${size}!</p>` : '';
+      $('#sizeMsg').innerHTML = st <= 2 ? `<p class="stock-msg" style="margin-top:8px">🔥 ${st === 1 ? '¡Última unidad' : `¡Últimas ${st} unidades`} en talla ${size}!</p>` : '';
     });
     const add = (go) => {
       if (!size) {
@@ -784,7 +791,7 @@
     $('#buyNow').onclick = () => add(true);
     $('#citySel').onchange = (e) => { store.set('mara_city', e.target.value); $('#eta').innerHTML = deliveryText(e.target.value); };
     $$('.acc > button').forEach((b) => b.onclick = () => b.parentElement.classList.toggle('is-open'));
-    $$('[data-zoom]').forEach((z) => z.onclick = () => openModal(`<div style="background:var(--soft);padding:20px">${media(p, ci, +z.dataset.zoom)}</div>`));
+    $$('[data-zoom]').forEach((z) => z.onclick = () => openModal(`<div style="background:var(--soft);padding:20px">${media(p, ci, +z.dataset.zoom, null, true)}</div>`));
 
     // Dots galería móvil
     const g = $('#gallery');
@@ -1243,7 +1250,7 @@
     document.addEventListener('mouseover', (e) => {
       const sw = e.target.closest('.card [data-sw]'); if (!sw) return;
       const cardEl = sw.closest('.card'); const p = byId(cardEl.dataset.card); const i = +sw.dataset.sw;
-      $('.main', cardEl).innerHTML = media(p, i, 0); $('.alt', cardEl).innerHTML = media(p, i, 3);
+      $('.main', cardEl).innerHTML = media(p, i, 0); $('.alt', cardEl).innerHTML = media(p, i, altView(p, i));
       $$('[data-sw]', cardEl).forEach((x) => x.classList.toggle('is-on', x === sw));
       $$('a[href^="#/p/"]', cardEl).forEach((a) => a.setAttribute('href', `#/p/${p.slug}?c=${i}`));
     });

@@ -71,6 +71,9 @@
     salvia:  { name: 'Verde salvia', hex: '#a7b8a0', a: '#a9baa2', b: '#8a9d82', c: '#ffffff', s: '#f4f6f2', lace: '#fff' },
     fucsia:  { name: 'Fucsia',       hex: '#e23e7b', a: '#e5467f', b: '#c02a62', c: '#ffffff', s: '#fff5f8', lace: '#fff' },
     coral:   { name: 'Coral',        hex: '#ff8a73', a: '#ff8f79', b: '#ef6a52', c: '#ffffff', s: '#fffaf8', lace: '#fff' },
+    frambuesa: { name: 'Rosa frambuesa', hex: '#e5455f', a: '#e5455f', b: '#f06b9a', c: '#ffffff', s: '#fff5f8',
+      img: ['01-frontal', '02-angulo', '03-pretina', '04-logo', '05-campana'].map((f) => `img/productos/nike-pro-short-3/${f}.webp`),
+      thumb: ['01-frontal', '02-angulo', '03-pretina', '04-logo', '05-campana'].map((f) => `img/productos/nike-pro-short-3/${f}-sm.webp`) },
     cacao:   { name: 'Cacao',        hex: '#6b4a3a', a: '#6b4a3a', b: '#52382b', c: '#e6c3b3', s: '#f3ebe5' }
   };
 
@@ -100,6 +103,12 @@
   const WT = (o) => P(Object.assign({ cat: 'tenis', gender: 'mujer', sub: 'tenis' }, o));
 
   const PRODUCTS = [
+    // ================== DESTACADO · FOTOS REALES ==================
+    W({ sub: 'shorts', brand: 'nike', brandName: 'Nike', name: 'Short Pro 3" Mujer', sport: 'training', art: 'biker', price: 130000, colors: ['frambuesa'], tags: ['nuevo', 'bestseller'],
+        stock: { XS: 0, S: 0, M: 0, L: 1, XL: 0 },
+        desc: 'El clásico short de compresión Nike Pro, favorito para gym, crossfit, voleibol y running. Tela Dri-FIT elástica que aleja el sudor, pretina ancha con logo jacquard que se queda en su lugar y largo de 3" (7,5 cm) que no se sube al moverte. Producto original y nuevo.',
+        specs: { Material: 'Poliéster / elastano · Dri-FIT', Largo: '3" (7,5 cm) de entrepierna', Ajuste: 'Ceñido · compresión', Tiro: 'Medio', Pretina: 'Elástica ancha con logo', Cuidado: 'Lavar en frío, no usar secadora' } }),
+
     // ================== MUJER · LEGGINGS ==================
     W({ sub: 'leggings', brand: 'nike', brandName: 'Nike', name: 'Leggings One Tiro Alto 7/8', sport: 'training', art: 'leggings', price: 219950, colors: ['negro', 'vino', 'salvia', 'lila'], tags: ['bestseller'],
         desc: 'Suaves, elásticos y 100% opacos. Tiro alto que se queda en su lugar mientras te mueves, con bolsillo oculto en la pretina.', specs: { Material: 'Poliéster / elastano', Tiro: 'Alto', Largo: '7/8', Compresión: 'Media' } }),
