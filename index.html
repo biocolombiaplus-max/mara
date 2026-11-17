@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>MARA Sport · Tenis y ropa deportiva multimarca en Colombia</title>
+  <meta name="description" content="Tenis, ropa y accesorios deportivos 100% originales de Nike, Adidas, Puma, New Balance, Asics, On, Hoka y Under Armour. Envío gratis desde $249.900, paga con Addi, PSE, Nequi o contraentrega.">
+  <meta name="theme-color" content="#0b0b0c">
+  <link rel="canonical" href="https://www.marasport.co/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MARA Sport · Tenis y ropa deportiva multimarca">
+  <meta property="og:description" content="Las mejores marcas deportivas en un solo lugar. 100% originales, envío a toda Colombia.">
+  <meta property="og:locale" content="es_CO">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0b0c'/%3E%3Cpath d='M14 46 24 18h6l6 16 6-16h6l10 28h-7l-6-17-6 17h-6l-6-17-6 17z' fill='%23ff5a1f'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": "MARA Sport",
+    "url": "https://www.marasport.co/",
+    "description": "Tienda multimarca de tenis y ropa deportiva en Colombia",
+    "address": {"@type": "PostalAddress", "addressLocality": "Bogotá", "addressCountry": "CO"},
+    "priceRange": "$$",
+    "currenciesAccepted": "COP",
+    "paymentAccepted": "Tarjeta de crédito, Tarjeta débito, PSE, Nequi, Daviplata, Addi, Efecty, Contraentrega"
+  }
+  </script>
+
+  <!--
+    ANALÍTICA: pega aquí Google Tag Manager / GA4 y el Pixel de Meta.
+    La tienda ya envía eventos a window.dataLayer: view_item, add_to_cart,
+    add_to_wishlist, begin_checkout, add_payment_info y purchase (formato GA4 e-commerce).
+  -->
+  <script>window.dataLayer = window.dataLayer || [];</script>
+</head>
+<body>
+  <a class="skip" href="#app">Saltar al contenido</a>
+
+  <!-- Barra de anuncios -->
+  <div class="announce" role="region" aria-label="Promociones">
+    <button class="announce__nav" data-announce="-1" aria-label="Anterior">‹</button>
+    <div class="announce__track" id="announceTrack">
+      <p class="is-active"><span>🚚 ENVÍO GRATIS en compras desde <b>$249.900</b> · Aplican TyC</span></p>
+      <p><span>💳 Paga en <b>3 cuotas sin interés</b> con Addi en tu primera compra</span></p>
+      <p><span>⚡ <b>10% OFF</b> en tu primera compra con el código <b>BIENVENIDO10</b></span></p>
+      <p><span>✅ Productos <b>100% originales</b> · 30 días para cambios</span></p>
+    </div>
+    <button class="announce__nav" data-announce="1" aria-label="Siguiente">›</button>
+  </div>
+
+  <!-- Encabezado -->
+  <header class="header" id="header">
+    <div class="header__top container">
+      <button class="icon-btn header__burger" id="burger" aria-label="Abrir menú">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <a href="#/" class="logo" aria-label="MARA Sport, inicio">
+        <span class="logo__mark">MARA</span><span class="logo__sub">SPORT</span>
+      </a>
+      <div class="search" id="search">
+        <svg class="search__icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="searchInput" type="search" placeholder="Busca tenis, marcas, deportes…" autocomplete="off" aria-label="Buscar productos">
+        <div class="search__panel" id="searchPanel" hidden></div>
+      </div>
+      <nav class="header__actions" aria-label="Cuenta">
+        <a href="#/rastreo" class="action hide-sm">
+          <svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+          <span>Rastrea tu pedido</span>
+        </a>
+        <a href="#/tiendas" class="action hide-sm">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <span>Tiendas</span>
+        </a>
+        <button class="action hide-sm" data-open="login">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+          <span>Ingresar</span>
+        </button>
+        <a href="#/favoritos" class="action" aria-label="Favoritos">
+          <svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9-9.5C2 7 4.3 4.5 7.2 4.5c2 0 3.6 1.2 4.8 2.9 1.2-1.7 2.8-2.9 4.8-2.9 2.9 0 5.2 2.5 4.2 6C19.5 15.4 12 20 12 20z"/></svg>
+          <span class="hide-sm">Favoritos</span>
+          <i class="badge" id="wishCount" hidden>0</i>
+        </a>
+        <button class="action" id="cartBtn" aria-label="Carrito">
+          <svg viewBox="0 0 24 24"><path d="M5 7h14l-1.2 12.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9z"/><path d="M9 7V6a3 3 0 0 1 6 0v1"/></svg>
+          <span class="hide-sm">Carrito</span>
+          <i class="badge" id="cartCount" hidden>0</i>
+        </button>
+      </nav>
+    </div>
+    <nav class="mainnav" id="mainnav" aria-label="Categorías"></nav>
+  </header>
+
+  <!-- Menú móvil -->
+  <aside class="drawer drawer--left" id="mobileMenu" aria-hidden="true">
+    <div class="drawer__head">
+      <span class="logo"><span class="logo__mark">MARA</span><span class="logo__sub">SPORT</span></span>
+      <button class="icon-btn" data-close aria-label="Cerrar">✕</button>
+    </div>
+    <div class="drawer__body" id="mobileMenuBody"></div>
+  </aside>
+
+  <main id="app" tabindex="-1"></main>
+
+  <!-- Carrito lateral -->
+  <aside class="drawer drawer--right" id="cartDrawer" aria-hidden="true" aria-label="Carrito de compras">
+    <div class="drawer__head">
+      <h2>Tu carrito <span id="cartDrawerCount"></span></h2>
+      <button class="icon-btn" data-close aria-label="Cerrar">✕</button>
+    </div>
+    <div class="drawer__body" id="cartBody"></div>
+    <div class="drawer__foot" id="cartFoot"></div>
+  </aside>
+
+  <!-- Modal genérico -->
+  <div class="modal" id="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal__box" id="modalBox"></div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <a class="whatsapp" href="https://wa.me/573000000000?text=Hola%20MARA%20Sport%2C%20quiero%20asesor%C3%ADa" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+    <svg viewBox="0 0 32 32"><path fill="#fff" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3zm0 23.6c-2 0-3.9-.5-5.6-1.5l-.4-.2-3.9 1 1-3.8-.3-.4A10.6 10.6 0 1 1 16 26.6zm5.8-7.9c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.2-.7.1a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.7 5.8 5.1 2.2.9 3 1 4.1.8.7-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5-.1-.1-.3-.2-.6-.3z"/></svg>
+    <span>¿Te asesoramos?</span>
+  </a>
+
+  <!-- Pie de página -->
+  <footer class="footer">
+    <div class="footer__trust container">
+      <div><b>Envío gratis</b><span>Desde $249.900 a toda Colombia</span></div>
+      <div><b>100% originales</b><span>Distribuidores autorizados</span></div>
+      <div><b>30 días para cambios</b><span>Fácil y sin costo en tienda</span></div>
+      <div><b>Pago seguro</b><span>Certificado SSL y pasarela PCI DSS</span></div>
+    </div>
+    <div class="footer__main container">
+      <div class="footer__brand">
+        <a href="#/" class="logo logo--light"><span class="logo__mark">MARA</span><span class="logo__sub">SPORT</span></a>
+        <p>Tu tienda multimarca de alto rendimiento. Las mejores marcas deportivas del mundo, asesoría experta y la experiencia de compra que mereces.</p>
+        <div class="social">
+          <a href="#" aria-label="Instagram">IG</a><a href="#" aria-label="TikTok">TT</a><a href="#" aria-label="Facebook">FB</a><a href="#" aria-label="YouTube">YT</a>
+        </div>
+      </div>
+      <div>
+        <h4>Comprar</h4>
+        <a href="#/tienda?gender=hombre">Hombre</a><a href="#/tienda?gender=mujer">Mujer</a><a href="#/tienda?gender=ninos">Niños</a><a href="#/tienda?sale=1">Outlet</a><a href="#/marcas">Marcas</a>
+      </div>
+      <div>
+        <h4>Ayuda</h4>
+        <a href="#/rastreo">Rastrea tu pedido</a><a href="#/info/cambios">Cambios y devoluciones</a><a href="#/info/envios">Envíos</a><a href="#/info/tallas">Guía de tallas</a><a href="#/info/pqrs">PQRS</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="#/info/terminos">Términos y condiciones</a><a href="#/info/privacidad">Política de datos (Ley 1581)</a><a href="#/info/retracto">Derecho de retracto</a><a href="#/info/reversion">Reversión del pago</a><a href="https://www.sic.gov.co" target="_blank" rel="noopener">Superintendencia de Industria y Comercio</a>
+      </div>
+      <div class="footer__news">
+        <h4>Únete al club MARA</h4>
+        <p>Lanzamientos, preventas y 10% OFF en tu primera compra.</p>
+        <form class="newsletter" data-newsletter>
+          <input type="email" required placeholder="Tu correo electrónico" aria-label="Correo electrónico">
+          <button class="btn btn--accent">Suscribirme</button>
+        </form>
+        <label class="check"><input type="checkbox" required checked> Acepto la política de tratamiento de datos.</label>
+      </div>
+    </div>
+    <div class="footer__pay container">
+      <span>Medios de pago</span>
+      <ul class="paylogos">
+        <li>VISA</li><li>Mastercard</li><li>AMEX</li><li>PSE</li><li>Nequi</li><li>Daviplata</li><li>Addi</li><li>Efecty</li><li>Contraentrega</li>
+      </ul>
+    </div>
+    <div class="footer__legal container">
+      <p>© <span id="year"></span> MARA Sport S.A.S. · NIT 900.000.000-0 · Bogotá, Colombia. Todas las marcas mencionadas pertenecen a sus respectivos dueños.</p>
+      <div class="footer__btns">
+        <a class="pill-link" href="#/info/retracto">Botón de arrepentimiento</a>
+        <a class="pill-link" href="#/info/pqrs">Radicar PQRS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Banner de cookies -->
+  <div class="cookies" id="cookies" hidden>
+    <p>Usamos cookies para mejorar tu experiencia y medir nuestras campañas. Consulta nuestra <a href="#/info/privacidad">política de datos</a>.</p>
+    <button class="btn btn--dark btn--sm" id="cookiesOk">Aceptar</button>
+  </div>
+
+  <script src="js/art.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
