@@ -384,6 +384,7 @@ p { margin: 0; }
 .gallery__item:hover svg { transform: scale(1.06); }
 .gallery--odd .gallery__item:first-child { grid-column: span 2; aspect-ratio: auto; }
 .gallery--odd .gallery__item:first-child img { aspect-ratio: 1; max-height: 760px; }
+.ia-badge { position: absolute; left: 12px; bottom: 12px; background: rgba(255, 255, 255, .9); color: var(--ink-2); font-size: 11px; font-weight: 600; padding: 5px 9px; border-radius: 6px; backdrop-filter: blur(4px); }
 .gallery__dots { display: none; }
 .buy { position: sticky; top: 140px; align-self: start; display: flex; flex-direction: column; gap: 18px; }
 .buy__brand { font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-size: 13px; }

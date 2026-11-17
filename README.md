@@ -67,3 +67,18 @@ Este front es un prototipo: el inventario, los pagos y los pedidos están simula
 3. **Logística:** Servientrega, Coordinadora o Interrapidísimo, o agregadores como Mipaquete o Envía.
 4. **Facturación electrónica DIAN:** Siigo, Alegra o el módulo de tu plataforma.
 5. **Fotos:** fondo gris claro (#F4F4F1), producto de perfil lateral y 4 ángulos, en formato WebP.
+
+## Fotos con modelo generadas con IA (Gemini)
+
+`tools/fotos_modelo.py` crea fotos profesionales de una modelo usando el producto, a partir de las fotos de estudio, con reglas estrictas para no cambiar color, logos, textos, largo ni costuras.
+
+```bash
+export GEMINI_API_KEY="tu-clave-de-google-ai-studio"
+python3 tools/fotos_modelo.py generar img/productos/nike-pro-short-3 --prenda "short de compresión Nike Pro de 3 pulgadas, rosa frambuesa"
+python3 tools/fotos_modelo.py aprobar img/productos/nike-pro-short-3 pendientes/modelo-frente.png pendientes/modelo-gym.png
+```
+
+- Tomas disponibles: `frente`, `tres-cuartos`, `detalle`, `gym`, `outdoor` (`--tomas`), varias opciones por toma con `--variantes 3`.
+- Todo queda primero en `pendientes/`: **revisa cada foto** y aprueba solo las que respeten el producto al 100%.
+- Las fotos `modelo-*` muestran en la tienda el aviso "Imagen referencial creada con IA" (información veraz, Ley 1480).
+- La clave de la API de Gemini se crea y se factura en Google AI Studio; es distinta de la suscripción Gemini Pro de la app.

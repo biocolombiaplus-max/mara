@@ -682,7 +682,7 @@
       <div class="pdp">
         <div>
           <div class="gallery ${views(p, ci).length % 2 ? 'gallery--odd' : ''}" id="gallery">
-            ${views(p, ci).map((v) => `<div class="gallery__item" data-zoom="${v}">${media(p, ci, v, null, true)}</div>`).join('')}
+            ${views(p, ci).map((v) => `<div class="gallery__item" data-zoom="${v}">${media(p, ci, v, null, true)}${/\/modelo-/.test((p.colors[ci].img || [])[v] || '') ? '<span class="ia-badge">Imagen referencial creada con IA</span>' : ''}</div>`).join('')}
           </div>
           <div class="gallery__dots" id="gdots">${views(p, ci).map((v) => `<i class="${v ? '' : 'is-on'}"></i>`).join('')}</div>
         </div>
