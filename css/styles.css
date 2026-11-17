@@ -2,16 +2,16 @@
    MARA Sport · Estilos
    ========================================================================= */
 :root {
-  --ink: #0b0b0c;
+  --ink: #141114;
   --ink-2: #2a2a2e;
   --muted: #6b6b72;
-  --line: #e6e6e3;
+  --line: #ebe3df;
   --bg: #ffffff;
-  --soft: #f4f4f1;
-  --soft-2: #ececE8;
-  --accent: #ff5a1f;
+  --soft: #f7f2ef;
+  --soft-2: #efe6e1;
+  --accent: #e23e7b;
   --accent-ink: #ffffff;
-  --volt: #d7ff3a;
+  --volt: #ffc4d8;
   --sale: #e3262f;
   --ok: #138a46;
   --radius: 14px;
@@ -111,7 +111,7 @@ p { margin: 0; }
 /* Navegación principal + mega menú */
 .mainnav { display: flex; justify-content: center; gap: 4px; height: 48px; position: relative; }
 .mainnav > .nav-item { position: static; }
-.mainnav > .nav-item > a { display: flex; align-items: center; height: 48px; padding: 0 18px; font-family: var(--head); font-weight: 700; font-size: 18px; letter-spacing: .6px; text-transform: uppercase; position: relative; }
+.mainnav > .nav-item > a { display: flex; align-items: center; height: 48px; padding: 0 14px; font-family: var(--head); font-weight: 700; font-size: 18px; letter-spacing: .6px; text-transform: uppercase; position: relative; }
 .mainnav > .nav-item > a::after { content: ''; position: absolute; left: 18px; right: 18px; bottom: 0; height: 3px; background: var(--ink); transform: scaleX(0); transition: transform .25s var(--ease); }
 .mainnav > .nav-item:hover > a::after, .mainnav > .nav-item > a.is-active::after { transform: scaleX(1); }
 .mainnav > .nav-item > a.is-sale { color: var(--sale); }
@@ -203,7 +203,7 @@ p { margin: 0; }
 .quick::-webkit-scrollbar { display: none; }
 .chip { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 18px; border-radius: 999px; background: var(--soft); font-weight: 600; font-size: 14px; transition: .2s; border: 1.5px solid transparent; }
 .chip:hover { background: var(--ink); color: #fff; }
-.chip--volt { background: var(--volt); }
+.chip--volt { background: var(--volt); color: #7a1840; }
 .chip.is-on { background: var(--ink); color: #fff; }
 
 /* Barra de confianza */
@@ -229,8 +229,26 @@ p { margin: 0; }
 .sport:hover svg { transform: rotate(-4deg) scale(1.08); }
 .sport b { font-family: var(--head); font-size: 24px; text-transform: uppercase; font-style: italic; line-height: 1; }
 
+/* Compra por prenda */
+.cats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.cat { position: relative; border-radius: 18px; aspect-ratio: 3 / 4; overflow: hidden; color: #fff; padding: 16px; display: flex; align-items: flex-end; isolation: isolate; }
+.cat svg { position: absolute; inset: 4% 0 auto 0; width: 100%; z-index: -1; transition: transform .5s var(--ease); }
+.cat::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 60%, rgba(0, 0, 0, .35)); z-index: -1; }
+.cat:hover svg { transform: scale(1.07) translateY(-4px); }
+.cat b { font-family: var(--head); font-size: 26px; text-transform: uppercase; font-style: italic; line-height: 1; }
+
+/* Guía de talla destacada */
+.fit { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; background: var(--soft); border-radius: 24px; padding: 48px; }
+.fit h2 { font-size: clamp(34px, 4vw, 52px); font-style: italic; margin-bottom: 14px; }
+.fit p { color: var(--ink-2); max-width: 520px; }
+.fit__levels { display: grid; gap: 10px; }
+.fit__level { background: #fff; border-radius: 14px; padding: 16px 20px; display: grid; grid-template-columns: 70px 1fr; gap: 2px 14px; align-items: center; transition: .2s; }
+.fit__level:hover { transform: translateX(4px); box-shadow: var(--shadow); }
+.fit__level span { grid-row: span 2; color: var(--accent); letter-spacing: 2px; font-size: 18px; }
+.fit__level small { color: var(--muted); }
+
 /* Marcas */
-.brands { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; }
+.brands { display: grid; grid-template-columns: repeat(9, 1fr); gap: 10px; }
 .brand-tile { height: 92px; border-radius: var(--radius); background: var(--soft); display: grid; place-items: center; font-family: var(--head); font-weight: 900; font-size: 26px; letter-spacing: .5px; text-transform: uppercase; font-style: italic; transition: .2s; color: var(--ink-2); text-align: center; padding: 0 8px; line-height: 1; }
 .brand-tile:hover { background: var(--ink); color: #fff; transform: translateY(-3px); }
 
@@ -313,7 +331,7 @@ p { margin: 0; }
 .score b { font-family: var(--head); font-size: 72px; line-height: 1; }
 
 /* Club / newsletter band */
-.club { border-radius: 20px; background: linear-gradient(120deg, var(--accent), #ff2d55); color: #fff; padding: 48px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; }
+.club { border-radius: 20px; background: linear-gradient(120deg, #e23e7b, #8b7ad8); color: #fff; padding: 48px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; }
 .club h2 { font-size: clamp(40px, 5vw, 68px); font-style: italic; }
 .club ul { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 6px; }
 .club li::before { content: '✓ '; font-weight: 800; }
@@ -555,7 +573,7 @@ p { margin: 0; }
 @media (max-width: 1180px) {
   .grid { grid-template-columns: repeat(3, 1fr); }
   .rail__track { grid-auto-columns: calc((100% - 2 * 18px) / 3); }
-  .brands { grid-template-columns: repeat(4, 1fr); }
+  .brands { grid-template-columns: repeat(5, 1fr); }
   .sports { grid-template-columns: repeat(3, 1fr); }
   .footer__main { grid-template-columns: repeat(3, 1fr); }
   .footer__brand, .footer__news { grid-column: span 3; }
@@ -590,7 +608,9 @@ p { margin: 0; }
   .tiles { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
   .tile { aspect-ratio: 3 / 4; padding: 14px; }
   .tile h3 { font-size: 26px; }
-  .split, .reviews, .club, .flash { grid-template-columns: 1fr; }
+  .split, .reviews, .club, .flash, .fit { grid-template-columns: 1fr; }
+  .fit { padding: 28px 22px; gap: 22px; }
+  .cats { grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .promo { min-height: 360px; padding: 28px; }
   .club { padding: 32px 24px; }
   .flash { padding: 28px 24px; }
@@ -639,7 +659,9 @@ p { margin: 0; }
   .tiles { grid-template-columns: 1fr; }
   .tile { aspect-ratio: 16 / 9; }
   .sports { grid-template-columns: repeat(2, 1fr); }
-  .brands { grid-template-columns: repeat(2, 1fr); }
+  .brands { grid-template-columns: repeat(3, 1fr); }
+  .cats { grid-template-columns: repeat(2, 1fr); }
+  .cat b { font-size: 22px; }
   .brand-tile { height: 72px; font-size: 22px; }
   .card__quick { display: none; }
   .card__name { font-size: 14px; }

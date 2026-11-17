@@ -1,6 +1,6 @@
-# MARA Sport · Tienda online multimarca de ropa y tenis deportivos
+# MARA Sport · Tienda online de ropa deportiva femenina multimarca
 
-Prototipo funcional de e-commerce premium para Colombia, inspirado en la experiencia de compra de las grandes tiendas deportivas (multimarca y de marca). Es HTML, CSS y JavaScript puro: no necesita instalar nada.
+Prototipo funcional de e-commerce premium para Colombia, **enfocado en la mujer**: leggings, tops y bras, conjuntos, bikers, faldas de pádel, chaquetas y tenis de mujer, con una línea complementaria de hombre. Es HTML, CSS y JavaScript puro: no necesita instalar nada.
 
 ## Cómo verla
 
@@ -12,6 +12,13 @@ Luego abre `http://localhost:8080`. También puedes subir la carpeta tal cual a 
 
 ## Qué incluye
 
+**Enfoque femenino**
+- Menú centrado en mujer: Novedades, Mujer, Leggings, Tops, Conjuntos, Tenis, Actividad (Gym, Yoga, Running, Pilates, Pádel, Athleisure); Hombre queda como línea secundaria
+- Filtro por tipo de prenda y actividad, tallas XS–XL y tenis 34–40
+- Guía de tallas por busto, cintura y cadera + nivel de soporte de tops (bajo, medio, alto)
+- Home con "Compra por prenda", promo de conjuntos (cupón `MARAFIT15`) y sección de asesoría de talla por WhatsApp
+- Paleta rosa frambuesa, nude y lila
+
 **Experiencia de compra**
 - Barra de anuncios rotativa (envío gratis, Addi, cupón de bienvenida)
 - Encabezado fijo con mega menú (Hombre, Mujer, Niños, Deportes, Marcas, Outlet) y menú lateral en móvil
@@ -20,7 +27,7 @@ Luego abre `http://localhost:8080`. También puedes subir la carpeta tal cual a 
 - Catálogo con filtros (género, categoría, deporte, marca, talla, color, precio, outlet, novedades), contadores, chips de filtros activos, 7 ordenamientos y panel de filtros en móvil
 - Tarjeta de producto: cambio de color al pasar el mouse, segunda imagen, insignias (-%, Nuevo, Top ventas), favoritos, compra rápida, cuotas Addi
 - Ficha de producto: galería con zoom, selector de color y talla (agotadas y últimas unidades), guía de tallas, fecha estimada de entrega por ciudad, recoger en tienda, asesoría por WhatsApp, ficha técnica, reseñas, "combínalo con", similares y barra fija de compra en móvil
-- Carrito lateral: barra de progreso hacia el envío gratis, cantidades, ventas adicionales, cupones (`BIENVENIDO10`, `RUNNER15`, `ENVIOGRATIS`) y ahorro total
+- Carrito lateral: barra de progreso hacia el envío gratis, cantidades, ventas adicionales, cupones (`BIENVENIDO10`, `MARAFIT15`, `ENVIOGRATIS`) y ahorro total
 - Checkout colombiano: tipo de documento, departamento y ciudad, envío estándar, express o recoger en tienda, y pago con tarjeta, PSE (bancos), Addi, Nequi, Daviplata, Efecty o contraentrega. Incluye validaciones y factura electrónica
 - Confirmación del pedido, rastreo, favoritos, tiendas físicas, marcas y PQRS
 

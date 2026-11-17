@@ -199,7 +199,44 @@
       <path d="M100 50 L170 50 L170 250 Q170 300 130 330 L76 340 Q50 340 52 316 Q56 296 84 292 L104 286 Z" fill="url(#g${id})"/>`;
   }
 
-  const shapes = { runner, court, cleat, tee, hoodie, jacket, shorts, leggings, bra, cap, bag, bottle, socks };
+  function tank(c, id) {
+    return `
+      <ellipse cx="200" cy="356" rx="110" ry="10" fill="url(#sh${id})"/>
+      <path d="M150 50 L170 50 Q200 110 230 50 L250 50 L258 120 Q290 150 286 200 L280 340 L120 340 L114 200 Q110 150 142 120 Z" fill="${c.a}"/>
+      <path d="M150 50 L170 50 Q200 110 230 50 L250 50" stroke="${c.b}" stroke-width="7" fill="none"/>
+      <path d="M142 120 Q120 150 116 200 M258 120 Q280 150 284 200" stroke="${c.c}" stroke-width="5" fill="none" opacity=".9"/>
+      <path d="M120 312 L280 312" stroke="${c.b}" stroke-width="10"/>
+      <path d="M150 50 L170 50 Q200 110 230 50 L250 50 L258 120 Q290 150 286 200 L280 340 L120 340 L114 200 Q110 150 142 120 Z" fill="url(#g${id})"/>`;
+  }
+
+  function biker(c, id) {
+    return `
+      <ellipse cx="200" cy="330" rx="110" ry="9" fill="url(#sh${id})"/>
+      <path d="M124 70 L276 70 L280 190 L270 300 L212 300 L202 170 L198 170 L188 300 L130 300 L120 190 Z" fill="${c.a}"/>
+      <path d="M124 70 L276 70 L277 108 L123 108Z" fill="${c.b}"/>
+      <path d="M200 112 Q180 140 200 168 Q220 140 200 112Z" fill="${shade(c.a, -18)}"/>
+      <path d="M270 120 L262 296 M130 120 L138 296" stroke="${c.c}" stroke-width="5" opacity=".9"/>
+      <path d="M124 70 L276 70 L280 190 L270 300 L212 300 L202 170 L198 170 L188 300 L130 300 L120 190 Z" fill="url(#g${id})"/>`;
+  }
+
+  function skort(c, id) {
+    return `
+      <ellipse cx="200" cy="320" rx="130" ry="10" fill="url(#sh${id})"/>
+      <path d="M132 90 L268 90 L300 290 Q200 312 100 290 Z" fill="${c.a}"/>
+      <path d="M132 90 L268 90 L271 122 L129 122Z" fill="${c.b}"/>
+      <path d="M160 122 L140 296 M200 122 L200 304 M240 122 L260 296" stroke="${shade(c.a, -22)}" stroke-width="3" opacity=".7"/>
+      <path d="M104 270 Q200 292 296 270" stroke="${c.c}" stroke-width="6" fill="none"/>
+      <path d="M132 90 L268 90 L300 290 Q200 312 100 290 Z" fill="url(#g${id})"/>`;
+  }
+
+  // Conjunto: top + leggings
+  function set(c, id) {
+    const top = `<g transform="translate(70,-30) scale(.65)">${bra(c, id)}</g>`;
+    const bottom = `<g transform="translate(70,130) scale(.65)">${leggings(c, id)}</g>`;
+    return `<ellipse cx="200" cy="372" rx="110" ry="9" fill="url(#sh${id})"/>` + top.replace(/<ellipse[^>]*\/>/, '') + bottom.replace(/<ellipse[^>]*\/>/, '');
+  }
+
+  const shapes = { runner, court, cleat, tee, tank, hoodie, jacket, shorts, biker, skort, leggings, bra, set, cap, bag, bottle, socks };
 
   /**
    * view: 0 = lateral, 1 = medial (espejo), 2 = detalle (zoom), 3 = 3/4

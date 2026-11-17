@@ -3,7 +3,7 @@
    ========================================================================= */
 (function () {
   'use strict';
-  const { BRANDS, SPORTS, CATS, PRODUCTS, CITIES, STORES, COUPONS } = window.MARA_DATA;
+  const { BRANDS, SPORTS, SUBS, CATS, PRODUCTS, CITIES, STORES, COUPONS } = window.MARA_DATA;
   const Art = window.MaraArt;
 
   const FREE_SHIP = 249900;
@@ -26,9 +26,10 @@
     get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* almacenamiento no disponible */ } }
   };
-  const GENDERS = { hombre: 'Hombre', mujer: 'Mujer', ninos: 'Niños', unisex: 'Unisex' };
+  const GENDERS = { mujer: 'Mujer', hombre: 'Hombre', unisex: 'Unisex' };
   const sportName = (id) => (SPORTS.find((s) => s.id === id) || {}).name || id;
   const catName = (id) => (CATS.find((c) => c.id === id) || {}).name || id;
+  const subName = (id) => (SUBS.find((s) => s.id === id) || {}).name || id;
   const brandName = (id) => (BRANDS.find((b) => b.id === id) || {}).name || id;
 
   function track(event, items, extra) {
@@ -152,70 +153,73 @@
 
   /* ---------------- Navegación ---------------- */
   function megaFor(g) {
-    const sp = SPORTS.filter((s) => g !== 'ninos' || ['running', 'lifestyle'].includes(s.id));
-    const promo = PRODUCTS.find((p) => p.gender === g && p.cat === 'tenis' && p.tags.includes('nuevo')) || PRODUCTS[0];
+    const promo = PRODUCTS.find((p) => p.gender === g && p.tags.includes('nuevo')) || PRODUCTS[0];
+    const subs = SUBS.filter((x) => PRODUCTS.some((p) => p.sub === x.id && (p.gender === g || p.gender === 'unisex')));
+    const sp = SPORTS.filter((x) => PRODUCTS.some((p) => p.sport === x.id && p.gender === g));
     return `<div class="mega"><div class="mega__inner">
-      <div><h6>Tenis</h6>
-        <a href="#/tienda?gender=${g}&cat=tenis">Ver todos los tenis</a>
-        ${sp.map((s) => `<a href="#/tienda?gender=${g}&cat=tenis&sport=${s.id}">${s.name}</a>`).join('')}
-      </div>
       <div><h6>Ropa</h6>
-        <a href="#/tienda?gender=${g}&cat=ropa">Ver toda la ropa</a>
-        <a href="#/tienda?gender=${g}&cat=ropa&sport=running">Ropa de running</a>
-        <a href="#/tienda?gender=${g}&cat=ropa&sport=training">Ropa de gimnasio</a>
-        <a href="#/tienda?gender=${g}&cat=ropa&sport=lifestyle">Lifestyle</a>
-        <h6 style="margin-top:18px">Accesorios</h6>
-        <a href="#/tienda?cat=accesorios">Gorras, maletines y más</a>
+        <a href="#/tienda?gender=${g}&cat=ropa"><b>Ver toda la ropa</b></a>
+        ${subs.filter((x) => x.cat === 'ropa').map((x) => `<a href="#/tienda?gender=${g}&sub=${x.id}">${x.name}</a>`).join('')}
       </div>
-      <div><h6>Destacados</h6>
-        <a href="#/tienda?gender=${g}&new=1">Lanzamientos</a>
+      <div><h6>Tenis y accesorios</h6>
+        <a href="#/tienda?gender=${g}&cat=tenis">Todos los tenis</a>
+        ${SPORTS.filter((x) => PRODUCTS.some((p) => p.cat === 'tenis' && p.sport === x.id && p.gender === g)).map((x) => `<a href="#/tienda?gender=${g}&cat=tenis&sport=${x.id}">Tenis de ${x.name.toLowerCase()}</a>`).join('')}
+        <a href="#/tienda?cat=accesorios">Accesorios</a>
+      </div>
+      <div><h6>Por actividad</h6>
+        ${sp.map((x) => `<a href="#/tienda?gender=${g}&sport=${x.id}">${x.name}</a>`).join('')}
+        <h6 style="margin-top:18px">Destacados</h6>
+        <a href="#/tienda?gender=${g}&new=1">Novedades</a>
         <a href="#/tienda?gender=${g}&sort=top">Más vendidos</a>
         <a href="#/tienda?gender=${g}&sale=1" style="color:var(--sale)">Outlet</a>
-        <a href="#/info/tallas">Guía de tallas</a>
       </div>
       <div><h6>Marcas</h6>
-        ${BRANDS.map((b) => `<a href="#/tienda?gender=${g}&brand=${b.id}">${b.name}</a>`).join('')}
+        ${BRANDS.filter((b) => PRODUCTS.some((p) => p.brand === b.id && p.gender === g)).map((b) => `<a href="#/tienda?gender=${g}&brand=${b.id}">${b.name}</a>`).join('')}
+        <a href="#/info/tallas" style="margin-top:10px;color:var(--accent);font-weight:600">Guía de tallas →</a>
       </div>
-      <a class="mega__promo" href="#/p/${promo.slug}" style="background:${promo.colors[0].hex === '#f4f4f2' ? '#111' : promo.colors[0].hex}">
-        ${media(promo, 0, 3)}
+      <a class="mega__promo" href="#/p/${promo.slug}" style="background:var(--accent)">
+        ${media(promo, 0, 0)}
         <span class="eyebrow" style="color:#fff;position:relative">Nuevo</span>
         <b>${esc(promo.brandName)}<br>${esc(promo.name)}</b>
-        <span style="color:var(--volt);font-weight:700;position:relative">Comprar ahora →</span>
+        <span style="color:#fff;font-weight:700;position:relative;text-decoration:underline">Comprar ahora →</span>
       </a>
     </div></div>`;
   }
 
   function renderNav() {
     const items = [
-      { label: 'Lanzamientos', href: '#/tienda?new=1' },
-      { label: 'Hombre', href: '#/tienda?gender=hombre', mega: 'hombre' },
+      { label: 'Novedades', href: '#/tienda?gender=mujer&new=1' },
       { label: 'Mujer', href: '#/tienda?gender=mujer', mega: 'mujer' },
-      { label: 'Niños', href: '#/tienda?gender=ninos', mega: 'ninos' },
-      { label: 'Deportes', href: '#/tienda', sports: true },
-      { label: 'Marcas', href: '#/marcas', brands: true },
+      { label: 'Leggings', href: '#/tienda?sub=leggings' },
+      { label: 'Tops', href: '#/tienda?sub=tops' },
+      { label: 'Conjuntos', href: '#/tienda?sub=conjuntos' },
+      { label: 'Tenis', href: '#/tienda?gender=mujer&cat=tenis' },
+      { label: 'Actividad', href: '#/tienda', sports: true },
+      { label: 'Hombre', href: '#/tienda?gender=hombre', mega: 'hombre' },
       { label: 'Outlet', href: '#/tienda?sale=1', sale: true }
     ];
     $('#mainnav').innerHTML = items.map((it) => {
       let drop = '';
       if (it.mega) drop = megaFor(it.mega);
       if (it.sports) drop = `<div class="mega"><div class="mega__inner" style="grid-template-columns:repeat(6,1fr)">${SPORTS.map((s) =>
-        `<a href="#/tienda?sport=${s.id}" class="sport" style="background:${s.bg}">${Art.render(s.id === 'futbol' ? 'cleat' : s.id === 'lifestyle' || s.id === 'basketball' ? 'court' : 'runner', { a: '#fff', b: '#ddd', c: s.bg, s: '#111' })}<b>${s.name}</b></a>`).join('')}</div></div>`;
+        `<a href="#/tienda?sport=${s.id}" class="sport" style="background:${s.bg}">${Art.render(({ training: 'bra', yoga: 'leggings', running: 'runner', pilates: 'biker', padel: 'skort', lifestyle: 'hoodie' })[s.id] || 'runner', { a: '#fff', b: '#f2f2f2', c: s.bg, s: '#111' })}<b>${s.name}</b></a>`).join('')}</div></div>`;
       if (it.brands) drop = `<div class="mega"><div class="mega__inner" style="grid-template-columns:repeat(8,1fr)">${BRANDS.map((b) => `<a class="brand-tile" href="#/tienda?brand=${b.id}">${b.name}</a>`).join('')}</div></div>`;
       return `<div class="nav-item"><a href="${it.href}" class="${it.sale ? 'is-sale' : ''}">${it.label}</a>${drop}</div>`;
     }).join('');
 
     // Menú móvil
     $('#mobileMenuBody').innerHTML = `
-      ${['hombre', 'mujer', 'ninos'].map((g) => `
-        <div class="mm-section"><button>${GENDERS[g]} <span>+</span></button>
-          <div class="mm-sub">
-            <a href="#/tienda?gender=${g}">Ver todo</a>
-            <a href="#/tienda?gender=${g}&cat=tenis">Tenis</a>
-            <a href="#/tienda?gender=${g}&cat=ropa">Ropa</a>
-            <a href="#/tienda?gender=${g}&new=1">Lanzamientos</a>
-            <a href="#/tienda?gender=${g}&sale=1">Outlet</a>
-          </div></div>`).join('')}
-      <div class="mm-section"><button>Deportes <span>+</span></button>
+      <div class="mm-section"><a href="#/tienda?gender=mujer&new=1">Novedades</a></div>
+      <div class="mm-section is-open"><button>Mujer <span>+</span></button>
+        <div class="mm-sub">
+          <a href="#/tienda?gender=mujer">Ver todo mujer</a>
+          ${SUBS.filter((x) => x.cat === 'ropa').map((x) => `<a href="#/tienda?gender=mujer&sub=${x.id}">${x.name}</a>`).join('')}
+          <a href="#/tienda?gender=mujer&cat=tenis">Tenis</a>
+          <a href="#/tienda?cat=accesorios">Accesorios</a>
+        </div></div>
+      <div class="mm-section"><button>Hombre <span>+</span></button>
+        <div class="mm-sub"><a href="#/tienda?gender=hombre">Ver todo hombre</a><a href="#/tienda?gender=hombre&cat=ropa">Ropa</a><a href="#/tienda?gender=hombre&cat=tenis">Tenis</a></div></div>
+      <div class="mm-section"><button>Actividad <span>+</span></button>
         <div class="mm-sub">${SPORTS.map((s) => `<a href="#/tienda?sport=${s.id}">${s.name}</a>`).join('')}</div></div>
       <div class="mm-section"><button>Marcas <span>+</span></button>
         <div class="mm-sub">${BRANDS.map((b) => `<a href="#/tienda?brand=${b.id}">${b.name}</a>`).join('')}</div></div>
@@ -245,7 +249,7 @@
       p.tags.includes('nuevo') ? '<span class="tag-b tag-b--new">Nuevo</span>' : '',
       p.tags.includes('bestseller') ? '<span class="tag-b tag-b--hot">Top ventas</span>' : ''
     ].join('');
-    const meta = `${catName(p.cat) === 'Tenis' ? sportName(p.sport) : catName(p.cat)} · ${GENDERS[p.gender]}`;
+    const meta = `${p.cat === 'tenis' ? 'Tenis ' + sportName(p.sport).toLowerCase() : subName(p.sub)}${p.gender === 'hombre' ? ' · Hombre' : ''}`;
     return `<article class="card" data-card="${p.id}">
       <a class="card__media" href="#/p/${p.slug}" aria-label="${esc(p.brandName + ' ' + p.name)}">
         <div class="main">${media(p, 0, 0)}</div><div class="alt">${media(p, 0, 3)}</div>
@@ -270,23 +274,28 @@
   }
 
   /* ---------------- HOME ---------------- */
+  const find = (name) => PRODUCTS.find((p) => p.name === name) || PRODUCTS[0];
   function viewHome() {
-    const best = PRODUCTS.filter((p) => p.tags.includes('bestseller'));
+    const W = PRODUCTS.filter((p) => p.gender !== 'hombre');
+    const best = W.filter((p) => p.tags.includes('bestseller'));
     const slides = [
-      { p: bySlug(PRODUCTS[2].slug), ci: 1, bg: 'linear-gradient(120deg,#ff5a1f 0%,#ff2d55 100%)', tag: 'Running Lab', h: 'Corre<br><em>más lejos.</em>', txt: 'Las siluetas más rápidas de ASICS, Nike, HOKA y On. Encuentra tu pisada ideal con asesoría experta.', cta: ['Comprar running', '#/tienda?sport=running&cat=tenis'], cta2: ['Ver lanzamientos', '#/tienda?new=1'], big: 'RUN' },
-      { p: PRODUCTS.find((p) => p.name === 'Samba OG'), ci: 1, bg: 'linear-gradient(120deg,#0b0b0c 0%,#2a2a2e 100%)', tag: 'Nueva temporada', h: 'Estilo que<br><em>se mueve.</em>', txt: 'Los clásicos que dominan la calle: Samba, 530, Palermo y Court Vision.', cta: ['Comprar lifestyle', '#/tienda?sport=lifestyle'], cta2: ['Mujer', '#/tienda?gender=mujer&sport=lifestyle'], big: 'STYLE' },
-      { p: PRODUCTS.find((p) => p.name === 'Ultraboost 5'), ci: 0, bg: 'linear-gradient(120deg,#e3262f 0%,#9e161c 100%)', tag: 'Outlet', h: 'Hasta<br><em>-25% off</em>', txt: 'Descuentos reales en marcas originales. Unidades limitadas por talla.', cta: ['Comprar outlet', '#/tienda?sale=1'], cta2: ['Hombre', '#/tienda?gender=hombre&sale=1'], big: 'SALE' }
+      { p: find('Conjunto Meridian Gym'), ci: 2, bg: 'linear-gradient(120deg,#e23e7b 0%,#ff7a8a 100%)', tag: 'Nueva colección', h: 'Fuerte.<br><em>Libre. Tú.</em>', txt: 'Leggings, tops y conjuntos de las mejores marcas, diseñados para moverte con confianza en cada entrenamiento.', cta: ['Comprar colección', '#/tienda?gender=mujer&new=1'], cta2: ['Ver conjuntos', '#/tienda?sub=conjuntos'], big: 'MARA' },
+      { p: find('Leggings Zenvy Sujeción Suave'), ci: 0, bg: 'linear-gradient(120deg,#8b7ad8 0%,#c9a48b 100%)', tag: 'Yoga & Pilates', h: 'Suave como<br><em>tu flow.</em>', txt: 'Prendas tipo segunda piel en tonos tierra y pastel para tu práctica en el estudio o en casa.', cta: ['Comprar yoga', '#/tienda?sport=yoga'], cta2: ['Pilates', '#/tienda?sport=pilates'], big: 'FLOW' },
+      { p: find('Clifton 10'), ci: 1, bg: 'linear-gradient(120deg,#1b1b1d 0%,#3a2a32 100%)', tag: 'Running mujer', h: 'Tu ritmo,<br><em>tus reglas.</em>', txt: 'Tenis y ropa de running pensados para la pisada y el cuerpo femenino: HOKA, Nike, ASICS y más.', cta: ['Comprar running', '#/tienda?gender=mujer&sport=running'], cta2: ['Outlet', '#/tienda?sale=1'], big: 'RUN' }
     ];
-    const sale = PRODUCTS.filter((p) => p.compareAt);
-    const genderTiles = [
-      { g: 'hombre', bg: '#1c2a4a', p: PRODUCTS[3] },
-      { g: 'mujer', bg: '#b9a6f0', p: PRODUCTS[5] },
-      { g: 'ninos', bg: '#8ec5ff', p: PRODUCTS.find((p) => p.gender === 'ninos') }
+    const sale = W.filter((p) => p.compareAt);
+    const cats = [
+      { sub: 'leggings', bg: '#1b1b1d', p: find('Leggings One Tiro Alto 7/8'), ci: 1 },
+      { sub: 'tops', bg: '#e23e7b', p: find('Top Swoosh Soporte Medio'), ci: 2 },
+      { sub: 'conjuntos', bg: '#a7b8a0', p: find('Conjunto Yoga Studio'), ci: 1 },
+      { sub: 'shorts', bg: '#c9a48b', p: find('Biker One 8"'), ci: 2 },
+      { sub: 'chaquetas', bg: '#8b7ad8', p: find('Buzo Hoodie Essentials'), ci: 0 },
+      { sub: 'tenis', bg: '#ff8a73', p: find('Samba OG'), ci: 1 }
     ];
     const revs = [
-      { n: 'Laura M.', c: 'Medellín', t: 'Llegaron en 2 días a Medellín y son 100% originales. El asesor por WhatsApp me ayudó con la talla perfecta.', p: 'HOKA Clifton 10' },
-      { n: 'Andrés R.', c: 'Bogotá', t: 'Pedí el viernes y el sábado ya los tenía. Pagué con Addi en 3 cuotas sin interés. Excelente experiencia.', p: 'ASICS Novablast 5' },
-      { n: 'Valentina G.', c: 'Cali', t: 'Hice un cambio de talla sin costo en la tienda de Chipichape. Súper fácil, me atendieron muy bien.', p: 'adidas Samba OG' }
+      { n: 'Laura M.', c: 'Medellín', t: 'Los leggings Meridian son lo más cómodo que he tenido. No transparentan nada al hacer sentadillas y la talla fue exacta.', p: 'Leggings Meridian' },
+      { n: 'Daniela R.', c: 'Bogotá', t: 'Me asesoraron por WhatsApp para elegir el top según mi talla de busto. Llegó en 2 días y pagué con Addi.', p: 'Top Infinity Soporte Alto' },
+      { n: 'Valentina G.', c: 'Cali', t: 'Cambié la talla del conjunto sin costo en la tienda. Me encanta que tengan tantas marcas en un solo lugar.', p: 'Conjunto Studio Seamless' }
     ];
 
     return `
@@ -312,12 +321,12 @@
     <div class="container">
       <nav class="quick" aria-label="Accesos rápidos">
         <a class="chip chip--volt" href="#/tienda?sale=1">🔥 Outlet hasta -25%</a>
-        <a class="chip" href="#/tienda?cat=tenis&sport=running">Tenis running</a>
-        <a class="chip" href="#/tienda?gender=mujer">Regalos para ella</a>
-        <a class="chip" href="#/tienda?gender=hombre">Regalos para él</a>
-        <a class="chip" href="#/tienda?gender=ninos">Niños</a>
-        <a class="chip" href="#/tienda?cat=ropa&max=200000">Ropa desde $139.950</a>
-        <a class="chip" href="#/tienda?cat=accesorios">Accesorios desde $69.900</a>
+        <a class="chip" href="#/tienda?sub=leggings">Leggings desde $169.900</a>
+        <a class="chip" href="#/tienda?sub=tops">Tops desde $119.900</a>
+        <a class="chip" href="#/tienda?sub=conjuntos">Conjuntos</a>
+        <a class="chip" href="#/tienda?sport=padel">Pádel</a>
+        <a class="chip" href="#/tienda?gender=mujer&cat=tenis">Tenis mujer</a>
+        <a class="chip" href="#/tienda?gender=mujer&max=150000">Regalos menos de $150.000</a>
       </nav>
     </div>
 
@@ -326,22 +335,23 @@
         <div>${icons.truck}<p><b>Envío gratis</b><span>Desde ${fmt(FREE_SHIP)}</span></p></div>
         <div>${icons.badge}<p><b>100% originales</b><span>Garantía de autenticidad</span></p></div>
         <div>${icons.card}<p><b>Paga como quieras</b><span>Addi, PSE, Nequi, contraentrega</span></p></div>
-        <div>${icons.refresh}<p><b>30 días para cambios</b><span>Sin costo y sin complicaciones</span></p></div>
+        <div>${icons.refresh}<p><b>Cambios de talla gratis</b><span>30 días, en tienda o a domicilio</span></p></div>
       </div>
     </div>
 
     <section class="section container">
-      <div class="tiles">
-        ${genderTiles.map((t) => `<a class="tile" href="#/tienda?gender=${t.g}" style="background:${t.bg}">${media(t.p, 0, 3)}<div><h3>${GENDERS[t.g]}</h3><span>Comprar ahora</span></div></a>`).join('')}
+      <div class="section__head"><div><span class="eyebrow">Hecho para ti</span><h2>Compra por prenda</h2></div><a class="link" href="#/tienda?gender=mujer">Ver todo mujer</a></div>
+      <div class="cats">
+        ${cats.map((t) => `<a class="cat" href="#/tienda?${t.sub === 'tenis' ? 'gender=mujer&cat=tenis' : 'sub=' + t.sub}" style="background:${t.bg}">${media(t.p, t.ci, 0)}<b>${subName(t.sub)}</b></a>`).join('')}
       </div>
     </section>
 
     <section class="section--tight container">
       <div class="section__head">
-        <div><span class="eyebrow">Lo que todos quieren</span><h2>Tendencias de la semana</h2></div>
+        <div><span class="eyebrow">Lo que todas quieren</span><h2>Favoritos de la semana</h2></div>
         <div class="tabs" id="homeTabs">
           <button class="chip is-on" data-tab="best">Más vendidos</button>
-          <button class="chip" data-tab="new">Lanzamientos</button>
+          <button class="chip" data-tab="new">Novedades</button>
           <button class="chip" data-tab="sale">Ofertas</button>
         </div>
         <div class="rail__nav"><button data-rail="railHome" data-dir="-1" aria-label="Anterior">‹</button><button data-rail="railHome" data-dir="1" aria-label="Siguiente">›</button></div>
@@ -350,54 +360,71 @@
     </section>
 
     <section class="section container">
-      <div class="section__head"><div><span class="eyebrow">Encuentra tu juego</span><h2>Compra por deporte</h2></div></div>
-      <div class="sports">
-        ${SPORTS.map((s) => {
-          const p = PRODUCTS.find((x) => x.sport === s.id && x.cat === 'tenis') || PRODUCTS[0];
-          return `<a class="sport" href="#/tienda?sport=${s.id}" style="background:${s.bg}">${media(p, 1 % p.colors.length, 0)}<b>${s.name}</b></a>`;
-        }).join('')}
+      <div class="split">
+        <a class="promo" href="#/tienda?sub=conjuntos" style="background:#a7b8a0">
+          ${media(find('Conjunto Studio Seamless Top + Leggings'), 0, 0)}
+          <span class="eyebrow" style="color:#fff">Combina sin pensarlo</span>
+          <h3>Conjuntos que esculpen</h3>
+          <p>Lleva el set completo y obtén 15% OFF adicional con el código <b>MARAFIT15</b>.</p>
+          <span class="btn btn--light" style="align-self:flex-start">Comprar conjuntos</span>
+        </a>
+        <a class="promo" href="#/tienda?sport=padel" style="background:#2f8f7a">
+          ${media(find('Falda-short Court Dri-FIT'), 2, 0)}
+          <span class="eyebrow" style="color:#fff">Pádel & Tenis</span>
+          <h3>Juega con estilo</h3>
+          <p>Faldas con short interno, tops y tenis con agarre para la cancha.</p>
+          <span class="btn btn--light" style="align-self:flex-start">Comprar pádel</span>
+        </a>
       </div>
     </section>
 
     <section class="section--tight container">
-      <div class="split">
-        <a class="promo" href="#/tienda?sport=running" style="background:#1c2a4a">
-          ${media(PRODUCTS[3], 0, 0)}
-          <span class="eyebrow" style="color:var(--volt)">Running Lab</span>
-          <h3>Tu próximo récord empieza aquí</h3>
-          <p>Analizamos tu pisada gratis en tienda y te recomendamos el tenis ideal.</p>
-          <span class="btn btn--light" style="align-self:flex-start">Descubrir</span>
-        </a>
-        <a class="promo" href="#/tienda?sport=training" style="background:#dcff4a;color:#111">
-          ${media(PRODUCTS.find((p) => p.name === 'Metcon 10'), 0, 0)}
-          <span class="eyebrow" style="color:#111">Training</span>
-          <h3>Hecho para el gym</h3>
-          <p>Estabilidad para levantar, agarre para tus WODs. Tenis y ropa de entrenamiento.</p>
-          <span class="btn btn--dark" style="align-self:flex-start">Comprar training</span>
-        </a>
+      <div class="section__head"><div><span class="eyebrow">Encuentra tu ritmo</span><h2>Compra por actividad</h2></div></div>
+      <div class="sports">
+        ${SPORTS.map((sp) => {
+          const p = W.find((x) => x.sport === sp.id && x.cat === 'ropa') || W.find((x) => x.sport === sp.id) || PRODUCTS[0];
+          return `<a class="sport" href="#/tienda?gender=mujer&sport=${sp.id}" style="background:${sp.bg}">${media(p, 0, 0)}<b>${sp.name}</b></a>`;
+        }).join('')}
       </div>
     </section>
 
     <section class="section container">
+      <div class="fit">
+        <div>
+          <span class="eyebrow">Talla perfecta, garantizada</span>
+          <h2>¿No sabes qué talla de top o leggings elegir?</h2>
+          <p>Usa nuestra guía de tallas por busto, cintura y cadera, o escríbele a una asesora por WhatsApp. Si no te queda, el cambio es gratis.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px">
+            <a class="btn" href="#/info/tallas">Ver guía de tallas</a>
+            <a class="btn btn--ghost" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Hola, necesito ayuda con mi talla')}" target="_blank" rel="noopener">Hablar con una asesora</a>
+          </div>
+        </div>
+        <div class="fit__levels">
+          ${[['Bajo', 'Yoga, pilates, caminar', 1], ['Medio', 'Gym, ciclismo, pádel', 2], ['Alto', 'Running, HIIT, saltos', 3]].map(([l, d, n]) => `<a href="#/tienda?sub=tops" class="fit__level"><span>${'●'.repeat(n)}${'○'.repeat(3 - n)}</span><b>Soporte ${l}</b><small>${d}</small></a>`).join('')}
+        </div>
+      </div>
+    </section>
+
+    <section class="section--tight container">
       <div class="flash">
         <div>
           <span class="eyebrow" style="color:var(--volt)">Solo por tiempo limitado</span>
           <h2>Flash sale <em>48 horas</em></h2>
-          <p style="opacity:.8;margin-top:10px">Precios especiales en referencias seleccionadas. Hasta agotar existencias.</p>
+          <p style="opacity:.8;margin-top:10px">Leggings, tops y tenis seleccionados con descuento. Hasta agotar existencias.</p>
         </div>
         <div class="countdown" id="countdown"></div>
       </div>
       <div style="margin-top:24px">${rail(sale, 'railSale')}</div>
     </section>
 
-    <section class="section--tight container">
+    <section class="section container">
       <div class="section__head"><div><span class="eyebrow">Distribuidores autorizados</span><h2>Las mejores marcas</h2></div><a class="link" href="#/marcas">Ver todas</a></div>
       <div class="brands">${BRANDS.map((b) => `<a class="brand-tile" href="#/tienda?brand=${b.id}">${b.name}</a>`).join('')}</div>
     </section>
 
-    <section class="section container">
+    <section class="section--tight container">
       <div class="section__head">
-        <div><span class="eyebrow">Opiniones verificadas</span><h2>+12.000 clientes felices</h2></div>
+        <div><span class="eyebrow">Opiniones verificadas</span><h2>+12.000 mujeres felices</h2></div>
         <div class="score"><b>4.8</b><div>${stars(4.8)}<br><small style="color:var(--muted)">Basado en 3.214 reseñas</small></div></div>
       </div>
       <div class="reviews">
@@ -405,12 +432,12 @@
       </div>
     </section>
 
-    <section class="section--tight container">
+    <section class="section container">
       <div class="club">
         <div>
           <span class="eyebrow" style="color:#fff">MARA Club · Gratis</span>
           <h2>10% OFF en tu primera compra</h2>
-          <ul><li>Acceso anticipado a lanzamientos y preventas</li><li>Ofertas exclusivas para miembros</li><li>Envío gratis en tu cumpleaños</li></ul>
+          <ul><li>Acceso anticipado a nuevas colecciones</li><li>Ofertas exclusivas para miembros</li><li>Regalo sorpresa en tu cumpleaños</li></ul>
         </div>
         <div>
           <form class="newsletter" data-newsletter><input type="email" required placeholder="Tu correo electrónico" aria-label="Correo"><button class="btn btn--dark">Quiero mi 10%</button></form>
@@ -444,7 +471,8 @@
     $$('#homeTabs [data-tab]').forEach((b) => b.onclick = () => {
       $$('#homeTabs .chip').forEach((c) => c.classList.toggle('is-on', c === b));
       const t = b.dataset.tab;
-      const list = t === 'new' ? PRODUCTS.filter((p) => p.tags.includes('nuevo')) : t === 'sale' ? PRODUCTS.filter((p) => p.compareAt) : PRODUCTS.filter((p) => p.tags.includes('bestseller'));
+      const W = PRODUCTS.filter((p) => p.gender !== 'hombre');
+      const list = t === 'new' ? W.filter((p) => p.tags.includes('nuevo')) : t === 'sale' ? W.filter((p) => p.compareAt) : W.filter((p) => p.tags.includes('bestseller'));
       $('#railHome').innerHTML = list.map(card).join(''); $('#railHome').scrollLeft = 0;
     });
 
@@ -463,8 +491,9 @@
 
   /* ---------------- CATÁLOGO (PLP) ---------------- */
   function matches(p, q, skip) {
-    if (q.gender && skip !== 'gender' && !(p.gender === q.gender || (p.gender === 'unisex' && q.gender !== 'ninos'))) return false;
+    if (q.gender && skip !== 'gender' && !(p.gender === q.gender || p.gender === 'unisex')) return false;
     if (q.cat && skip !== 'cat' && p.cat !== q.cat) return false;
+    if (q.sub && skip !== 'sub' && !q.sub.split(',').includes(p.sub)) return false;
     if (q.sport && skip !== 'sport' && !q.sport.split(',').includes(p.sport)) return false;
     if (q.brand && skip !== 'brand' && !q.brand.split(',').includes(p.brand)) return false;
     if (q.size && skip !== 'size' && !q.size.split(',').some((s) => p.stock[s] > 0)) return false;
@@ -474,7 +503,7 @@
     if (q.sale && !p.compareAt) return false;
     if (q.new && !p.tags.includes('nuevo')) return false;
     if (q.q) {
-      const hay = norm([p.name, p.brandName, catName(p.cat), sportName(p.sport), GENDERS[p.gender], p.colors.map((c) => c.name).join(' '), p.desc].join(' '));
+      const hay = norm([p.name, p.brandName, catName(p.cat), subName(p.sub), sportName(p.sport), GENDERS[p.gender], p.colors.map((c) => c.name).join(' '), p.desc].join(' '));
       if (!norm(q.q).split(/\s+/).filter(Boolean).every((w) => hay.includes(w) || hay.includes(w.replace(/s$/, '')))) return false;
     }
     return true;
@@ -494,7 +523,8 @@
     const parts = [];
     if (q.sale) parts.push('Outlet');
     if (q.new) parts.push('Lanzamientos');
-    if (q.cat) parts.push(catName(q.cat));
+    if (q.sub && !q.sub.includes(',')) parts.push(subName(q.sub));
+    else if (q.cat) parts.push(catName(q.cat));
     if (q.sport && !q.sport.includes(',')) parts.push(sportName(q.sport));
     if (q.brand && !q.brand.includes(',')) parts.push(brandName(q.brand));
     if (q.gender) parts.push(GENDERS[q.gender]);
@@ -504,9 +534,10 @@
   function viewPLP(q) {
     const list = sortList(PRODUCTS.filter((p) => matches(p, q)), q.sort);
     const count = (group, val) => PRODUCTS.filter((p) => matches(p, q, group) && (
-      group === 'brand' ? p.brand === val : group === 'sport' ? p.sport === val : group === 'cat' ? p.cat === val : group === 'gender' ? p.gender === val : true)).length;
+      group === 'brand' ? p.brand === val : group === 'sport' ? p.sport === val : group === 'sub' ? p.sub === val : group === 'cat' ? p.cat === val : group === 'gender' ? p.gender === val : true)).length;
     const has = (k, v) => (q[k] || '').split(',').includes(v);
-    const sizes = q.cat === 'ropa' ? ['XS', 'S', 'M', 'L', 'XL', 'XXL'] : q.gender === 'ninos' ? ['28', '29', '30', '31', '32', '33', '34', '35'] : ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44'];
+    const isShoe = q.cat === 'tenis' || q.sub === 'tenis';
+    const sizes = isShoe ? (q.gender === 'hombre' ? ['38', '39', '40', '41', '42', '43', '44'] : ['34', '35', '36', '37', '38', '39', '40']) : ['XS', 'S', 'M', 'L', 'XL'];
     const palette = window.MARA_DATA.PALETTE;
     const group = (title, body, closed) => `<div class="fgroup ${closed ? 'is-closed' : ''}"><button type="button">${title}</button><div class="fbody">${body}</div></div>`;
     const checks = (key, items) => items.map(([id, name]) => {
@@ -516,8 +547,8 @@
 
     const chipsActive = [];
     ['gender', 'cat'].forEach((k) => { if (q[k]) chipsActive.push([k, q[k], k === 'gender' ? GENDERS[q[k]] : catName(q[k])]); });
-    ['sport', 'brand', 'size', 'color'].forEach((k) => (q[k] || '').split(',').filter(Boolean).forEach((v) =>
-      chipsActive.push([k, v, k === 'sport' ? sportName(v) : k === 'brand' ? brandName(v) : k === 'color' ? palette[v].name : 'Talla ' + v])));
+    ['sub', 'sport', 'brand', 'size', 'color'].forEach((k) => (q[k] || '').split(',').filter(Boolean).forEach((v) =>
+      chipsActive.push([k, v, k === 'sub' ? subName(v) : k === 'sport' ? sportName(v) : k === 'brand' ? brandName(v) : k === 'color' ? palette[v].name : 'Talla ' + v])));
     if (q.sale) chipsActive.push(['sale', '1', 'Outlet']);
     if (q.new) chipsActive.push(['new', '1', 'Nuevos']);
     if (q.min || q.max) chipsActive.push(['price', '', `${q.min ? fmt(q.min) : '$0'} – ${q.max ? fmt(q.max) : 'más'}`]);
@@ -538,9 +569,9 @@
       <div class="plp">
         <aside class="filters ${filtersOpen ? 'is-open' : ''}" id="filters" aria-label="Filtros">
           <div class="filters__head"><h3>Filtrar</h3><button class="icon-btn" data-close-filters aria-label="Cerrar">✕</button></div>
-          ${group('Género', checks('gender', [['hombre', 'Hombre'], ['mujer', 'Mujer'], ['ninos', 'Niños'], ['unisex', 'Unisex']]).replace(/type="checkbox" data-f="gender"/g, 'type="radio" name="g" data-f="gender"'))}
-          ${group('Categoría', checks('cat', CATS.map((c) => [c.id, c.name])).replace(/type="checkbox" data-f="cat"/g, 'type="radio" name="c" data-f="cat"'))}
-          ${group('Deporte', checks('sport', SPORTS.map((s) => [s.id, s.name])))}
+          ${group('Tipo de prenda', checks('sub', SUBS.map((x) => [x.id, x.name])))}
+          ${group('Actividad', checks('sport', SPORTS.map((s) => [s.id, s.name])))}
+          ${group('Línea', checks('gender', [['mujer', 'Mujer'], ['hombre', 'Hombre']]).replace(/type="checkbox" data-f="gender"/g, 'type="radio" name="g" data-f="gender"'))}
           ${group('Marca', checks('brand', BRANDS.map((b) => [b.id, b.name])))}
           ${group('Talla', `<div class="fsizes">${sizes.map((s) => `<button type="button" data-size="${s}" class="${has('size', s) ? 'is-on' : ''}">${s}</button>`).join('')}</div>`)}
           ${group('Color', `<div class="fcolors">${Object.entries(palette).map(([k, c]) => `<button type="button" data-color="${k}"><span class="sw ${has('color', k) ? 'is-on' : ''}" style="background:${c.hex}"></span>${c.name.split(' ')[0]}</button>`).join('')}</div>`, true)}
@@ -589,7 +620,7 @@
     $$('[data-rm]').forEach((b) => b.onclick = () => {
       const k = b.dataset.rm;
       if (k === 'price') setQuery(Object.assign({}, q, { min: '', max: '' }));
-      else if (['sport', 'brand', 'size', 'color'].includes(k)) setQuery(toggleIn(k, b.dataset.v));
+      else if (['sub', 'sport', 'brand', 'size', 'color'].includes(k)) setQuery(toggleIn(k, b.dataset.v));
       else setQuery(Object.assign({}, q, { [k]: '' }));
     });
     $$('[data-clear]').forEach((b) => b.onclick = () => { filtersOpen = false; setQuery({}); });
@@ -609,11 +640,11 @@
   }
 
   function sampleReviews(p) {
-    const names = ['Camila R.', 'Juan P.', 'Daniela V.', 'Santiago M.', 'Mariana L.', 'Felipe C.'];
+    const names = p.gender === 'hombre' ? ['Juan P.', 'Santiago M.', 'Felipe C.', 'Andrés R.', 'Camilo T.', 'Mateo G.'] : ['Camila R.', 'Daniela V.', 'Mariana L.', 'Sofía C.', 'Natalia P.', 'Juliana M.'];
     const cities = ['Bogotá', 'Medellín', 'Cali', 'Bucaramanga', 'Pereira', 'Barranquilla'];
     const texts = p.cat === 'tenis'
       ? [['Comodísimos', 'Los uso para correr 3 veces por semana y la amortiguación es increíble. Talla exacta.'], ['Originales y rápidos', 'Llegaron en 48 horas, con caja y etiquetas originales. Volveré a comprar.'], ['Muy buenos', 'Calzan un poco ajustados, recomiendo media talla más si tienes el pie ancho.'], ['Excelente servicio', 'Me asesoraron por WhatsApp y acertaron con el modelo. 10/10.']]
-      : [['Excelente calidad', 'La tela es muy buena y no se deforma con las lavadas.'], ['Me encantó', 'Talla exacta y el color es igual al de la foto.'], ['Recomendado', 'Muy cómodo para entrenar, seca rápido.'], ['Buen precio', 'Lo compré en oferta y la calidad es la de la marca original.']];
+      : [['No transparenta', 'Hice sentadillas frente al espejo y cero transparencias. La tela es gruesa pero fresca.'], ['Me encantó', 'Talla exacta y el color es igual al de la foto. Estiliza muchísimo.'], ['Recomendado', 'Muy cómodo para entrenar, seca rápido. Pediría una talla menos si estás entre dos.'], ['Calidad original', 'Lo compré en oferta y la calidad es la de la marca original. Ya voy por el segundo color.']];
     return texts.map((t, i) => ({ n: names[(i + p.createdAt) % 6], c: cities[(i * 2 + p.createdAt) % 6], r: i === 2 ? 4 : 5, t: t[0], b: t[1], d: `hace ${i * 5 + 3} días` }));
   }
 
@@ -634,13 +665,13 @@
     const o = off(p);
     const rv = sampleReviews(p);
     const related = PRODUCTS.filter((x) => x.id !== p.id && (x.sport === p.sport || x.brand === p.brand)).slice(0, 8);
-    const complete = PRODUCTS.filter((x) => x.cat !== p.cat && (x.gender === p.gender || x.gender === 'unisex')).slice(0, 8);
+    const complete = PRODUCTS.filter((x) => x.sub !== p.sub && x.sub !== 'conjuntos' && (x.gender === p.gender || x.gender === 'unisex') && (x.sport === p.sport || x.cat !== 'ropa')).slice(0, 8);
     const allCities = Object.values(CITIES).flat().sort((a, b) => a.localeCompare(b, 'es'));
     const savedCity = store.get('mara_city', 'Bogotá');
     const dist = [72, 18, 6, 3, 1];
 
     return `<div class="container">
-      <nav class="crumbs"><a href="#/">Inicio</a> / <a href="#/tienda?gender=${p.gender}">${GENDERS[p.gender]}</a> / <a href="#/tienda?gender=${p.gender}&cat=${p.cat}">${catName(p.cat)}</a> / <a href="#/tienda?sport=${p.sport}">${sportName(p.sport)}</a></nav>
+      <nav class="crumbs"><a href="#/">Inicio</a> / <a href="#/tienda?gender=${p.gender}">${GENDERS[p.gender]}</a> / <a href="#/tienda?gender=${p.gender}&sub=${p.sub}">${subName(p.sub)}</a></nav>
       <div class="pdp">
         <div>
           <div class="gallery" id="gallery">
@@ -655,7 +686,7 @@
               <a href="#reviews" style="text-decoration:none">${stars(p.rating, p.reviews)}</a>
             </div>
             <h1 style="margin-top:8px">${esc(p.name)}</h1>
-            <p style="color:var(--muted);margin-top:6px">${catName(p.cat)} de ${sportName(p.sport).toLowerCase()} · ${GENDERS[p.gender]} · Ref. ${p.id}</p>
+            <p style="color:var(--muted);margin-top:6px">${subName(p.sub)} · ${sportName(p.sport)} · ${GENDERS[p.gender]} · Ref. ${p.id}</p>
           </div>
           <div>
             ${priceHTML(p)}
@@ -680,8 +711,8 @@
             <div class="perk">${icons.truck}<div><b>${p.price >= FREE_SHIP ? 'Envío gratis' : 'Envío ' + fmt(SHIP_STD) + ' · gratis desde ' + fmt(FREE_SHIP)}</b>
               <small id="eta">${deliveryText(savedCity)}</small>
               <div class="city"><select id="citySel" aria-label="Ciudad de entrega">${allCities.map((x) => `<option ${x === savedCity ? 'selected' : ''}>${x}</option>`).join('')}</select></div></div></div>
-            <div class="perk">${icons.store}<div><b>Recoge gratis en tienda</b><small>Disponible hoy en MARA Andino (Bogotá) y El Tesoro (Medellín)</small></div></div>
-            <div class="perk">${icons.refresh}<div><b>30 días para cambios</b><small>Cambia talla o referencia sin costo.</small></div></div>
+            <div class="perk">${icons.store}<div><b>Recoge gratis en tienda</b><small>Pruébatelo y recógelo hoy en MARA Andino (Bogotá) o El Tesoro (Medellín)</small></div></div>
+            <div class="perk">${icons.refresh}<div><b>Cambio de talla gratis</b><small>30 días para cambiar talla o color sin costo.</small></div></div>
             <div class="perk">${icons.shield}<div><b>Producto 100% original</b><small>Importado por distribuidores autorizados de ${esc(p.brandName)}.</small></div></div>
             <div class="perk">${icons.chat}<div><b>¿Dudas con la talla?</b><small><a class="link" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Hola, tengo una pregunta sobre ' + p.brandName + ' ' + p.name + ' (' + p.id + ')')}" target="_blank" rel="noopener">Habla con un asesor por WhatsApp</a></small></div></div>
           </div>
@@ -707,7 +738,7 @@
             <div class="score"><b>${p.rating.toFixed(1)}</b><div>${stars(p.rating)}<br><small style="color:var(--muted)">${p.reviews} opiniones</small></div></div>
             <div class="bars" style="margin-top:18px">${dist.map((v, i) => `<div><small>${5 - i}★</small><span><i style="width:${v}%"></i></span><small>${v}%</small></div>`).join('')}</div>
             <p style="margin-top:18px;font-size:14px"><b>94%</b> de los clientes lo recomiendan</p>
-            ${p.cat === 'tenis' ? `<p style="margin-top:10px;font-size:14px">Ajuste: <b>Talla exacta</b></p>` : ''}
+            <p style="margin-top:10px;font-size:14px">Ajuste: <b>${p.cat === 'ropa' ? 'Talla exacta · tela con compresión' : 'Talla exacta'}</b></p>
           </div>
           <div class="rev-list">${rv.map((r) => `<div class="rev-item">${stars(r.r)}<h5>${r.t}</h5><p>${r.b}</p><small><b style="color:var(--ink)">${r.n}</b> · ${r.c} · ${r.d} · <span class="verified">✓ Compra verificada</span></small></div>`).join('')}</div>
         </div>
@@ -1083,10 +1114,16 @@
   };
 
   function sizeTable() {
-    const rows = [['35', '5', '4', '22.5'], ['36', '6', '5', '23'], ['37', '7', '6', '23.5'], ['38', '7.5', '6.5', '24'], ['39', '8', '7', '25'], ['40', '8.5', '7.5', '25.5'], ['41', '9', '8', '26'], ['42', '9.5', '8.5', '27'], ['43', '10', '9', '27.5'], ['44', '11', '10', '28.5']];
-    return `<p>Mide tu pie desde el talón hasta el dedo más largo y compara con la tabla. Si estás entre dos tallas, elige la mayor.</p>
-      <table><tr><th>CO / EU</th><th>US Hombre</th><th>US Mujer</th><th>CM</th></tr>${rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('')}</table>
-      <h2>Ropa</h2><table><tr><th>Talla</th><th>Pecho (cm)</th><th>Cintura (cm)</th></tr>${[['XS', '82-87', '66-71'], ['S', '88-94', '72-78'], ['M', '95-102', '79-86'], ['L', '103-111', '87-95'], ['XL', '112-121', '96-106'], ['XXL', '122-132', '107-118']].map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
+    const tr = (rows) => rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('');
+    return `<p>Toma tus medidas con una cinta métrica sobre ropa interior. Si estás entre dos tallas, elige la menor para más compresión o la mayor para un ajuste más suelto.</p>
+      <h2>Ropa mujer</h2>
+      <table><tr><th>Talla</th><th>Busto (cm)</th><th>Cintura (cm)</th><th>Cadera (cm)</th><th>Equivale</th></tr>${tr([['XS', '76-81', '58-63', '84-89', '4-6'], ['S', '82-87', '64-69', '90-95', '8'], ['M', '88-93', '70-75', '96-101', '10'], ['L', '94-100', '76-82', '102-108', '12-14'], ['XL', '101-108', '83-90', '109-116', '16']])}</table>
+      <h2>Tops y bras por nivel de soporte</h2>
+      <table><tr><th>Soporte</th><th>Ideal para</th></tr>${tr([['Bajo', 'Yoga, pilates, caminar, uso diario'], ['Medio', 'Gym, ciclismo, pádel, baile'], ['Alto', 'Running, HIIT, saltos, copas grandes']])}</table>
+      <h2>Tenis mujer</h2>
+      <table><tr><th>CO / EU</th><th>US Mujer</th><th>CM</th></tr>${tr([['34', '4', '21.5'], ['35', '5', '22'], ['36', '6', '22.5'], ['37', '6.5', '23.5'], ['38', '7.5', '24'], ['39', '8', '25'], ['40', '9', '25.5']])}</table>
+      <h2>Ropa hombre</h2>
+      <table><tr><th>Talla</th><th>Pecho (cm)</th><th>Cintura (cm)</th></tr>${tr([['S', '88-94', '72-78'], ['M', '95-102', '79-86'], ['L', '103-111', '87-95'], ['XL', '112-121', '96-106']])}</table>`;
   }
 
   function viewInfo(k) {
@@ -1100,7 +1137,7 @@
   function initSearch() {
     const input = $('#searchInput'), panel = $('#searchPanel');
     let focusIdx = -1;
-    const trending = ['Samba', 'Novablast', 'Clifton', 'Leggings', 'Running mujer', 'Guayos'];
+    const trending = ['Leggings tiro alto', 'Conjunto', 'Top soporte alto', 'Biker', 'Falda pádel', 'Samba'];
     const show = () => {
       const v = input.value.trim();
       focusIdx = -1;
@@ -1243,9 +1280,9 @@
       setTimeout(() => {
         if ($('.modal.is-open') || $('.drawer.is-open') || location.hash.startsWith('#/checkout')) return;
         store.set('mara_welcome', 1);
-        const p = PRODUCTS[4];
+        const p = find('Top Swoosh Soporte Medio');
         openModal(`<div class="welcome"><div class="welcome__art"><b>10%<br>OFF</b>${media(p, 0, 0)}</div>
-          <div class="welcome__body"><span class="eyebrow">Bienvenido a MARA Club</span><h2>Tu primera compra con 10% OFF</h2><p style="color:var(--muted)">Suscríbete y recibe tu código al instante, además de acceso anticipado a lanzamientos.</p>
+          <div class="welcome__body"><span class="eyebrow">Bienvenido a MARA Club</span><h2>Tu primera compra con 10% OFF</h2><p style="color:var(--muted)">Únete a la comunidad MARA: recibe tu código al instante y acceso anticipado a nuevas colecciones.</p>
           <form class="newsletter" data-newsletter><input type="email" required placeholder="Tu correo" aria-label="Correo"><button class="btn btn--accent">Obtener</button></form>
           <button class="link" data-close style="font-size:13px;color:var(--muted)">No gracias, prefiero pagar precio completo</button></div></div>`);
       }, 9000);
