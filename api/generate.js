@@ -1,4 +1,4 @@
-import { guard, saveImage, send } from './_lib.js';
+import { isAdmin, hasBlob, saveImage, send } from './_lib.js';
 
 // POST /api/generate → crea una foto con Gemini ("Nano Banana Pro") a partir de las fotos del producto.
 // body: { mode: 'estudio' | 'modelo', shot, prenda, images: [{ type, data(base64) }] }
@@ -33,7 +33,9 @@ Prendas complementarias lisas y neutras (negro o blanco) SIN logos de ninguna ma
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return send(res, 405, { error: 'Método no permitido' });
-  if (!guard(req, res)) return;
+  if (!isAdmin(req)) return send(res, 401, { error: 'Clave incorrecta' });
+  // Sin Vercel Blob la foto se devuelve directamente (en 1K para no superar el límite de respuesta de Vercel)
+  const blob = hasBlob();
   const key = process.env.GEMINI_API_KEY;
   if (!key) return send(res, 503, { error: 'Falta la variable GEMINI_API_KEY en Vercel', code: 'NO_GEMINI' });
   const { mode = 'estudio', shot = 'frente', prenda = '', extra = '', images = [] } = req.body || {};
@@ -49,7 +51,7 @@ export default async function handler(req, res) {
   const parts = [{ text: prompt }].concat(images.slice(0, 6).map((im) => ({
     inline_data: { mime_type: im.type || 'image/jpeg', data: String(im.data).replace(/^data:[^,]+,/, '') }
   })));
-  const body = { contents: [{ role: 'user', parts }], generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: '1:1', imageSize: '2K' } } };
+  const body = { contents: [{ role: 'user', parts }], generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: '1:1', imageSize: blob ? '2K' : '1K' } } };
 
   let lastErr = '';
   for (const model of MODELS) {
@@ -66,6 +68,7 @@ export default async function handler(req, res) {
     const img = (j.candidates || []).flatMap((c) => (c.content && c.content.parts) || []).find((p) => p.inlineData);
     if (!img) return send(res, 502, { error: 'Gemini no devolvió imagen. Intenta de nuevo o cambia la toma.' });
     const type = img.inlineData.mimeType || 'image/png';
+    if (!blob) return send(res, 200, { dataUrl: `data:${type};base64,${img.inlineData.data}`, mode, shot, model });
     const url = await saveImage(`ia/${mode}-${shot}.${type.includes('png') ? 'png' : 'jpg'}`, Buffer.from(img.inlineData.data, 'base64'), type);
     return send(res, 200, { url, mode, shot, model });
   }

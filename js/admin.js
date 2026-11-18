@@ -699,7 +699,7 @@
     const prenda = `${sub} ${D.BRANDS.find((b) => b.id === d.brand).name} "${d.name}", color ${c.name}. ${d.desc || ''}`.slice(0, 600);
     const r = await api('POST', '/api/generate', { mode, shot, prenda, images });
     if (!r.ok) throw new Error(r.data.error || 'Gemini no pudo crear la foto');
-    return r.data.url;
+    return r.data.url || r.data.dataUrl;
   }
 
   async function aiModelPhotos() {
@@ -716,7 +716,7 @@
         const url = await aiGenerate('modelo', shots[i], refs);
         let saved;
         try { saved = await uploadCanvas(await urlToCanvas(url), `modelo-${shots[i]}-${Date.now().toString(36)}`); }
-        catch (e) { saved = { img: url, thumb: url }; }
+        catch (e) { if (url.startsWith('data:')) throw e; saved = { img: url, thumb: url }; }
         c.img.push(saved.img); c.thumb.push(saved.thumb);
         steps[i].state = 'done'; steps[i].msg = 'Lista';
       } catch (e) { steps[i].state = 'error'; steps[i].msg = e.message; }
