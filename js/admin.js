@@ -729,7 +729,7 @@
     const list = (shots.length ? shots : ['frente']).map((s, i) => `${i + 1}. ${SHOT_TXT[s]}.`).join('\n');
     return `La imagen adjunta muestra un producto real: ${sub.toLowerCase()} ${brand} "${d.name}", color ${c.name}.${d.desc ? ' ' + d.desc : ''}
 
-Crea ${shots.length > 1 ? shots.length + ' fotografías profesionales distintas' : 'una fotografía profesional'} de e-commerce de una gran marca deportiva, con una modelo usando ESTE producto exacto:
+${shots.length > 1 ? `Vamos a crear ${shots.length} fotografías profesionales de e-commerce de una gran marca deportiva, con una modelo usando ESTE producto exacto. Crea AHORA SOLO LA FOTO 1. Cuando yo escriba "siguiente", crea la siguiente de la lista, con la misma modelo y el mismo producto:` : 'Crea una fotografía profesional de e-commerce de una gran marca deportiva, con una modelo usando ESTE producto exacto:'}
 ${list}
 
 REGLAS ESTRICTAS (lo más importante):
@@ -740,15 +740,47 @@ REGLAS ESTRICTAS (lo más importante):
 - El resto de su ropa, liso y neutro (negro o blanco), sin logos de ninguna marca.
 - Luz suave de estudio, lente 85 mm, colores fieles, alta nitidez, formato cuadrado 1:1, sin texto ni marcas de agua.`;
   }
-  async function copyPrompt() {
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); return true; } catch (e) { /* respaldo abajo */ }
+    const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove(); return ok;
+  }
+
+  // Ventana con el prompt visible, botón para copiar y botón para abrir Gemini
+  function copyPrompt() {
     const text = buildPrompt();
-    try { await navigator.clipboard.writeText(text); toast('✓ Prompt copiado. Pégalo en Gemini con la foto del producto'); }
-    catch (e) {
-      const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); toast('✓ Prompt copiado'); } catch (err) { prompt('Copia este texto:', text); }
-      ta.remove();
-    }
-    window.open('https://gemini.google.com/app', '_blank', 'noopener');
+    const c = state.draft.colors[state.colorIdx];
+    const wrap = document.createElement('div');
+    wrap.className = 'adm-modal';
+    wrap.innerHTML = `<div class="adm-modal__box" role="dialog" aria-modal="true" aria-label="Prompt para Gemini">
+      <button class="adm-modal__x" data-x aria-label="Cerrar">✕</button>
+      <h2>Crear fotos con modelo en Gemini</h2>
+      <ol class="adm-free">
+        <li><b>Copia el prompt</b> con el botón rosado.</li>
+        <li><b>Descarga la foto</b> del producto ${c.img.length ? '' : '(primero sube una)'}.</li>
+        <li><b>Abre Gemini</b>, toca el <b>+</b> para adjuntar la foto, haz clic en el cuadro de texto y pega con <b>Ctrl + V</b> (en celular: mantén presionado → Pegar). Envía.</li>
+      </ol>
+      <textarea class="adm-prompt" readonly>${esc(text)}</textarea>
+      <div class="adm-modal__actions">
+        <button class="btn btn--accent" data-copy>📋 Copiar prompt</button>
+        ${c.img.length ? `<a class="btn btn--ghost" href="${c.img[0]}" download="producto-${esc(D.slugify(state.draft.name || 'foto'))}.jpg" target="_blank" rel="noopener">⬇ Descargar foto</a>` : ''}
+        <a class="btn btn--dark" href="https://gemini.google.com/app" target="_blank" rel="noopener">Abrir Gemini ↗</a>
+      </div>
+    </div>`;
+    document.body.appendChild(wrap);
+    const close = () => wrap.remove();
+    wrap.addEventListener('click', (e) => { if (e.target === wrap || e.target.closest('[data-x]')) close(); });
+    document.addEventListener('keydown', function esc_(e) { if (e.key === 'Escape') { close(); document.removeEventListener('keydown', esc_); } });
+    const ta = $('.adm-prompt', wrap);
+    ta.addEventListener('focus', () => ta.select());
+    const btn = $('[data-copy]', wrap);
+    btn.onclick = async () => {
+      const ok = await copyText(text);
+      if (ok) { btn.textContent = '✓ Copiado. Ahora pégalo en Gemini'; btn.classList.add('is-done'); toast('✓ Prompt copiado'); }
+      else { ta.focus(); ta.select(); btn.textContent = 'Selecciona el texto y copia con Ctrl + C'; }
+    };
   }
 
   async function aiModelPhotos() {

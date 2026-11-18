@@ -1349,8 +1349,8 @@
   function loadAdmin() {
     if (window.MaraAdmin) return Promise.resolve();
     if (!adminLoading) adminLoading = new Promise((ok, bad) => {
-      const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'css/admin.css?v=2'; document.head.appendChild(css);
-      const js = document.createElement('script'); js.src = 'js/admin.js?v=2'; js.onload = ok; js.onerror = bad; document.body.appendChild(js);
+      const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'css/admin.css?v=4'; document.head.appendChild(css);
+      const js = document.createElement('script'); js.src = 'js/admin.js?v=4'; js.onload = ok; js.onerror = bad; document.body.appendChild(js);
     });
     return adminLoading;
   }
