@@ -53,7 +53,7 @@
     if (c.img && c.img.length) {
       const i = view % c.img.length;
       const src = big || !c.thumb ? c.img[i] : c.thumb[i];
-      return `<img src="${src}" alt="${esc(p.brandName + ' ' + p.name + ' ' + c.name + ' · vista ' + (i + 1))}" loading="lazy" decoding="async">`;
+      return `<img src="${src}" alt="${esc(p.brandName + ' ' + p.name + ' ' + c.name + ' · vista ' + (i + 1))}" loading="lazy" decoding="async" data-fb="${p.id}|${ci}|${view}">`;
     }
     return Art.render(p.art, c, view, bg);
   }
@@ -682,7 +682,7 @@
       <div class="pdp">
         <div>
           <div class="gallery ${views(p, ci).length % 2 ? 'gallery--odd' : ''}" id="gallery">
-            ${views(p, ci).map((v) => `<div class="gallery__item" data-zoom="${v}">${media(p, ci, v, null, true)}${/\/modelo-/.test((p.colors[ci].img || [])[v] || '') ? '<span class="ia-badge">Imagen referencial creada con IA</span>' : ''}</div>`).join('')}
+            ${views(p, ci).map((v) => `<div class="gallery__item" data-zoom="${v}">${media(p, ci, v, null, true)}${/\/(modelo|ia)-/.test((p.colors[ci].img || [])[v] || '') ? '<span class="ia-badge">Imagen referencial creada con IA</span>' : ''}</div>`).join('')}
           </div>
           <div class="gallery__dots" id="gdots">${views(p, ci).map((v) => `<i class="${v ? '' : 'is-on'}"></i>`).join('')}</div>
         </div>
@@ -690,7 +690,7 @@
           <div>
             <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
               <a class="buy__brand" href="#/tienda?brand=${p.brand}">${esc(p.brandName)}</a>
-              <a href="#reviews" style="text-decoration:none">${stars(p.rating, p.reviews)}</a>
+              <a href="#reviews" style="text-decoration:none">${p.reviews ? stars(p.rating, p.reviews) : '<span class="stars" style="color:var(--muted)">Sé la primera en opinar</span>'}</a>
             </div>
             <h1 style="margin-top:8px">${esc(p.name)}</h1>
             <p style="color:var(--muted);margin-top:6px">${subName(p.sub)} · ${sportName(p.sport)} · ${GENDERS[p.gender]} · Ref. ${p.id}</p>
@@ -739,8 +739,8 @@
       </section>
 
       <section class="section" id="reviews">
-        <div class="section__head"><h2>Opiniones (${p.reviews})</h2><button class="btn btn--ghost btn--sm" data-open="review">Escribir opinión</button></div>
-        <div class="rev-summary">
+        <div class="section__head"><h2>Opiniones${p.reviews ? ` (${p.reviews})` : ''}</h2><button class="btn btn--ghost btn--sm" data-open="review">Escribir opinión</button></div>
+        ${p.reviews ? `<div class="rev-summary">
           <div>
             <div class="score"><b>${p.rating.toFixed(1)}</b><div>${stars(p.rating)}<br><small style="color:var(--muted)">${p.reviews} opiniones</small></div></div>
             <div class="bars" style="margin-top:18px">${dist.map((v, i) => `<div><small>${5 - i}★</small><span><i style="width:${v}%"></i></span><small>${v}%</small></div>`).join('')}</div>
@@ -748,7 +748,7 @@
             <p style="margin-top:10px;font-size:14px">Ajuste: <b>${p.cat === 'ropa' ? 'Talla exacta · tela con compresión' : 'Talla exacta'}</b></p>
           </div>
           <div class="rev-list">${rv.map((r) => `<div class="rev-item">${stars(r.r)}<h5>${r.t}</h5><p>${r.b}</p><small><b style="color:var(--ink)">${r.n}</b> · ${r.c} · ${r.d} · <span class="verified">✓ Compra verificada</span></small></div>`).join('')}</div>
-        </div>
+        </div>` : `<div class="empty" style="padding:40px 20px;background:var(--soft);border-radius:var(--radius)"><h3 style="font-size:28px">Aún no hay opiniones</h3><p>¿Ya lo tienes? Cuéntale a otras clientas cómo te quedó.</p><button class="btn" data-open="review">Escribir la primera opinión</button></div>`}
       </section>
 
       <section class="section--tight">
@@ -1032,6 +1032,11 @@
       store.set('mara_customer', { email: f.email.value, fname: f.fname.value, lname: f.lname.value, doctype: f.doctype.value, doc: f.doc.value, phone: f.phone.value, dep: f.dep.value, city: f.city.value, addr: f.addr.value, addr2: f.addr2.value });
       setTimeout(() => {
         const orders = store.get('mara_orders', []); orders.unshift(order); store.set('mara_orders', orders.slice(0, 20));
+        // Registra el pedido en el panel administrativo (Vercel). Si no hay servidor, queda solo en este navegador.
+        fetch('/api/orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true, body: JSON.stringify(Object.assign({}, order, {
+          phone: f.phone.value, doc: f.doc.value,
+          items: order.items.map((l) => { const p = byId(l.id); return { id: l.id, name: p ? p.brandName + ' ' + p.name : l.id, color: p ? p.colors[l.ci].name : '', size: l.size, qty: l.qty, price: p ? p.price : 0 }; })
+        })) }).catch(() => {});
         track('purchase', order.items.map((l) => ({ p: byId(l.id), qty: l.qty, color: byId(l.id).colors[l.ci].name })), { transaction_id: id, value: t.total, shipping: t.ship, coupon: coupon || undefined });
         cart = []; coupon = ''; saveCart(); renderCart();
         location.hash = '#/gracias/' + id;
@@ -1072,12 +1077,16 @@
     </div>`;
   }
 
+  const trackCache = {};
   function viewTrack(q) {
-    const o = q.id ? store.get('mara_orders', []).find((x) => x.id === q.id.toUpperCase()) : null;
+    let o = q.id ? store.get('mara_orders', []).find((x) => x.id === q.id.toUpperCase()) : null;
     let res = '';
-    if (q.id && o) {
-      const hrs = (Date.now() - o.date) / 3.6e6;
-      const st = hrs > 48 ? 3 : hrs > 6 ? 2 : hrs > 0.05 ? 1 : 0;
+    const remote = q.id && trackCache[q.id.toUpperCase()];
+    if (q.id && (remote || o)) {
+      const src = remote || o;
+      const idx = { recibido: 0, preparando: 1, 'en-camino': 2, entregado: 3 };
+      const st = remote ? (idx[remote.status] ?? 0) : 0;
+      o = src;
       res = `<div class="order-box"><b>Pedido ${o.id}</b><span>Destino: ${esc(o.city)}, ${esc(o.dep)}</span>
         <div class="timeline">${['Recibido', 'Preparando', 'En camino', 'Entregado'].map((s, i) => `<div class="${i <= st ? 'is-on' : ''}">${s}</div>`).join('')}</div></div>`;
     } else if (q.id) res = `<p class="size-msg" style="margin-top:14px">No encontramos el pedido ${esc(q.id)}. Verifica el número o escríbenos por WhatsApp.</p>`;
@@ -1203,12 +1212,21 @@
     else if (seg[0] === 'checkout') { html = viewCheckout(); init = initCheckout; document.title = 'Pago seguro · MARA Sport'; }
     else if (seg[0] === 'gracias') { html = viewThanks(seg[1]); }
     else if (seg[0] === 'favoritos') { html = viewWish(); }
-    else if (seg[0] === 'rastreo') { html = viewTrack(q); init = () => { $('#trackForm').onsubmit = (e) => { e.preventDefault(); location.hash = '#/rastreo?id=' + encodeURIComponent(e.target.id.value.trim()); }; }; }
+    else if (seg[0] === 'rastreo') {
+      html = viewTrack(q);
+      init = () => {
+        $('#trackForm').onsubmit = (e) => { e.preventDefault(); location.hash = '#/rastreo?id=' + encodeURIComponent(e.target.id.value.trim()); };
+        const id = (q.id || '').toUpperCase();
+        if (id && !trackCache[id]) fetch('/api/orders?id=' + encodeURIComponent(id)).then((r) => r.ok ? r.json() : null).then((d) => { if (d && d.status) { trackCache[id] = d; render(true); } }).catch(() => {});
+      };
+    }
+    else if (seg[0] === 'admin') { document.body.classList.add('is-admin'); app.innerHTML = '<div class="adm-loading">Cargando panel…</div>'; loadAdmin().then(() => window.MaraAdmin.render(seg.slice(1), q)); lastPath = path; return; }
     else if (seg[0] === 'tiendas') { html = viewStores(); }
     else if (seg[0] === 'marcas') { html = viewBrands(); }
     else if (seg[0] === 'info') { html = viewInfo(seg[1]); init = () => { const f = $('#pqrsForm'); if (f) f.onsubmit = (e) => { e.preventDefault(); f.innerHTML = '<p class="full"><b>✓ Solicitud radicada.</b> Número de radicado: PQ-' + Date.now().toString().slice(-6) + '. Te responderemos a tu correo.</p>'; }; }; }
     else html = view404();
 
+    document.body.classList.remove('is-admin');
     app.innerHTML = html;
     if (init) init();
 
@@ -1285,7 +1303,7 @@
     // Popup de bienvenida (primera visita, 9 s)
     if (!store.get('mara_welcome', 0)) {
       setTimeout(() => {
-        if ($('.modal.is-open') || $('.drawer.is-open') || location.hash.startsWith('#/checkout')) return;
+        if ($('.modal.is-open') || $('.drawer.is-open') || /^#\/(checkout|admin)/.test(location.hash)) return;
         store.set('mara_welcome', 1);
         const p = find('Top Swoosh Soporte Medio');
         openModal(`<div class="welcome"><div class="welcome__art"><b>10%<br>OFF</b>${media(p, 0, 0)}</div>
@@ -1297,10 +1315,61 @@
     $('#year').textContent = new Date().getFullYear();
   }
 
+  /* ---------------- Catálogo administrado (panel) ---------------- */
+  const { BASE, makeProduct, colorOf, SUBS: SUBLIST } = window.MARA_DATA;
+  function applyStore(data) {
+    const d = data || {};
+    const fresh = BASE.map((b) => JSON.parse(JSON.stringify(b)));
+    const ov = d.overrides || {};
+    fresh.forEach((p) => {
+      const o = ov[p.id]; if (!o) return;
+      Object.assign(p, o);
+      if (o.colors) p.colors = o.colors.map(colorOf);
+      const b = BRANDS.find((x) => x.id === p.brand); if (b) p.brandName = b.name;
+      const sb = SUBLIST.find((x) => x.id === p.sub); if (sb) p.cat = sb.cat;
+    });
+    const custom = (d.products || []).map((raw) => {
+      const sb = SUBLIST.find((x) => x.id === raw.sub);
+      return makeProduct(Object.assign({ cat: sb ? sb.cat : 'ropa', rating: 0, reviews: 0, createdAt: 9999 }, raw));
+    });
+    const all = custom.concat(fresh);
+    PRODUCTS.length = 0;
+    all.filter((p) => !p.hidden).forEach((p) => PRODUCTS.push(p));
+    return all;
+  }
+  async function fetchStore() {
+    try {
+      const r = await fetch('/api/store', { cache: 'no-store' });
+      if (r.ok) { const d = await r.json(); if (d.configured) return Object.assign(d, { source: 'vercel' }); }
+    } catch (e) { /* sin servidor: modo demo */ }
+    const local = store.get('mara_admin_store', null);
+    return local ? Object.assign(local, { source: 'local' }) : { source: 'none' };
+  }
+  let adminLoading;
+  function loadAdmin() {
+    if (window.MaraAdmin) return Promise.resolve();
+    if (!adminLoading) adminLoading = new Promise((ok, bad) => {
+      const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'css/admin.css?v=2'; document.head.appendChild(css);
+      const js = document.createElement('script'); js.src = 'js/admin.js?v=2'; js.onload = ok; js.onerror = bad; document.body.appendChild(js);
+    });
+    return adminLoading;
+  }
+
+  // Si una foto no carga, muestra la ilustración del producto en su lugar (nunca un recuadro roto)
+  document.addEventListener('error', (e) => {
+    const im = e.target;
+    if (!im || im.tagName !== 'IMG' || !im.dataset.fb || im.dataset.failed) return;
+    im.dataset.failed = '1';
+    const [id, ci, v] = im.dataset.fb.split('|'); const p = byId(id);
+    if (p) im.outerHTML = Art.render(p.art, p.colors[+ci] || p.colors[0], 0);
+  }, true);
+
+  window.MARA_APP = { media, card, fmt, esc, toast, store, applyStore, fetchStore, render: () => render(true), PRODUCTS, byId };
+
   renderNav();
   bindGlobal();
   initSearch();
   updateBadges();
   renderCart();
-  render();
+  fetchStore().then((d) => { applyStore(d); }).finally(() => { renderNav(); updateBadges(); renderCart(); render(); });
 })();

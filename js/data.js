@@ -78,25 +78,34 @@
   };
 
   let n = 0;
+  const slugify = (t) => String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const ART_BY_SUB = { leggings: 'leggings', tops: 'bra', conjuntos: 'set', shorts: 'biker', faldas: 'skort', camisetas: 'tee', chaquetas: 'hoodie', tenis: 'runner', accesorios: 'bag' };
+
+  // Un color puede ser una clave de la paleta ('negro') o un objeto { name, hex, img: [], thumb: [] }
+  function colorOf(k) {
+    if (typeof k === 'string') return Object.assign({ key: k }, C[k]);
+    const hex = k.hex || '#999999';
+    const sh = (window.MaraArt && window.MaraArt.shade) || ((h) => h);
+    return Object.assign({ key: slugify(k.name || hex), a: hex, b: sh(hex, -28), c: '#ffffff', s: '#f6f6f4', lace: '#fff' }, k);
+  }
+
   function P(o) {
     n++;
-    const slug = (o.brandName + ' ' + o.name).toLowerCase()
-      .normalize('NFD').replace(/[̀-ͯ]/g, '')
-      .replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    const brand = BRANDS.find(b => b.id === o.brand);
+    const brand = BRANDS.find(b => b.id === o.brand) || { name: o.brandName || o.brand || 'MARA' };
     const sizes = o.sizes || (o.cat === 'tenis' ? (o.gender === 'hombre' ? SHOE_M : SHOE_W) : o.cat === 'ropa' ? APPAREL : ['Única']);
-    // Disponibilidad simulada por talla (determinística)
+    // Disponibilidad simulada por talla (determinística) para el catálogo de muestra
     const stock = {};
     sizes.forEach((s, i) => { stock[s] = ((n * 7 + i * 13) % 11 === 0) ? 0 : ((n + i) % 5 === 0 ? 2 : 10); });
     return Object.assign({
       id: 'MS' + String(1000 + n),
-      slug: slug + '-' + (1000 + n),
-      brandName: brand.name,
-      sizes, stock,
+      slug: slugify(brand.name + ' ' + o.name) + '-' + (1000 + n),
+      sizes, stock, tags: [], specs: {},
+      art: ART_BY_SUB[o.sub] || 'runner',
       rating: 4.3 + ((n * 37) % 7) / 10,
       reviews: 18 + (n * 53) % 420,
       createdAt: n
-    }, o, { brandName: brand.name, colors: o.colors.map(k => Object.assign({ key: k }, C[k])) });
+    }, o, { brandName: brand.name, colors: (o.colors || []).map(colorOf) });
   }
 
     const W = (o) => P(Object.assign({ cat: 'ropa', gender: 'mujer' }, o));
@@ -105,7 +114,7 @@
   const PRODUCTS = [
     // ================== DESTACADO · FOTOS REALES ==================
     W({ sub: 'shorts', brand: 'nike', brandName: 'Nike', name: 'Short Pro 3" Mujer', sport: 'training', art: 'biker', price: 130000, colors: ['frambuesa'], tags: ['nuevo', 'bestseller'],
-        stock: { XS: 0, S: 0, M: 0, L: 1, XL: 0 },
+        stock: { XS: 0, S: 0, M: 0, L: 1, XL: 0 }, rating: 0, reviews: 0,
         desc: 'El clásico short de compresión Nike Pro, favorito para gym, crossfit, voleibol y running. Tela Dri-FIT elástica que aleja el sudor, pretina ancha con logo jacquard que se queda en su lugar y largo de 3" (7,5 cm) que no se sube al moverte. Producto original y nuevo.',
         specs: { Material: 'Poliéster / elastano · Dri-FIT', Largo: '3" (7,5 cm) de entrepierna', Ajuste: 'Ceñido · compresión', Tiro: 'Medio', Pretina: 'Elástica ancha con logo', Cuidado: 'Lavar en frío, no usar secadora' } }),
 
@@ -250,5 +259,7 @@
     MARAFIT15: { type: 'pct', value: 15, label: '15% en conjuntos', min: 300000 }
   };
 
-  window.MARA_DATA = { BRANDS, SPORTS, SUBS, CATS, PRODUCTS, CITIES, STORES, COUPONS, PALETTE: C };
+  // Copia del catálogo base (sin cambios del panel) y utilidades para el panel administrativo
+  const BASE = JSON.parse(JSON.stringify(PRODUCTS));
+  window.MARA_DATA = { BRANDS, SPORTS, SUBS, CATS, PRODUCTS, BASE, CITIES, STORES, COUPONS, PALETTE: C, makeProduct: P, colorOf, slugify, ART_BY_SUB, SIZESETS: { ropa: APPAREL, tenisMujer: SHOE_W, tenisHombre: SHOE_M, unica: ['Única'] } };
 })();

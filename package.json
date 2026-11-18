@@ -1,0 +1,12 @@
+{
+  "name": "mara-sport",
+  "private": true,
+  "type": "module",
+  "description": "Tienda MARA Sport: sitio estático + funciones de Vercel para el panel administrativo",
+  "dependencies": {
+    "@vercel/blob": "2.8.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

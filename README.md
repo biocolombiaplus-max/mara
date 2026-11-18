@@ -82,3 +82,24 @@ python3 tools/fotos_modelo.py aprobar img/productos/nike-pro-short-3 pendientes/
 - Todo queda primero en `pendientes/`: **revisa cada foto** y aprueba solo las que respeten el producto al 100%.
 - Las fotos `modelo-*` muestran en la tienda el aviso "Imagen referencial creada con IA" (información veraz, Ley 1480).
 - La clave de la API de Gemini se crea y se factura en Google AI Studio; es distinta de la suscripción Gemini Pro de la app.
+
+## Panel administrativo
+
+Entra desde el botón **"Panel administrativo"** del pie de página (o `/#/admin`). Clave por defecto: **123456**. Cámbiala con la variable `ADMIN_PASSWORD` en Vercel.
+
+- **Resumen:** ventas, pedidos por despachar, productos con poco inventario y lista de tareas de configuración.
+- **Productos:** buscar, filtrar, publicar u ocultar con un interruptor, y editar cualquier producto.
+- **Nuevo producto / editor:** fotos, información, precio con descuento, colores, tallas, inventario por talla y ficha técnica, con vista previa en vivo.
+- **Estudio de fotos:**
+  - *Estudio automático* (gratis, en el navegador): quita el fondo y crea 4 tomas (frente, ángulo, detalle y zoom) sobre fondo de estudio. También sugiere el nombre del color.
+  - *Solo mejorar*: recorte cuadrado y mejora de color, para fotos con modelo o en ambiente.
+  - *Estudio con IA* y *Fotos con modelo* (Gemini): requieren `GEMINI_API_KEY` en Vercel y facturación activa en Google AI Studio.
+- **Pedidos:** los pedidos de la tienda llegan aquí; cambia el estado y la clienta lo ve en "Rastrea tu pedido". Botón para escribir por WhatsApp.
+
+### Activarlo en Vercel (5 minutos)
+
+1. Vercel → proyecto **mara** → **Storage** → **Create Database** → **Blob** → acceso **Public** → conéctalo al proyecto.
+2. **Settings → Environment Variables**: `ADMIN_PASSWORD` (tu clave) y, si quieres IA, `GEMINI_API_KEY`.
+3. **Deployments → Redeploy**.
+
+Sin Blob conectado, el panel funciona en **modo demo**: los cambios se guardan solo en ese navegador.

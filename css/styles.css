@@ -555,6 +555,10 @@ p { margin: 0; }
 .footer__btns { display: flex; gap: 8px; flex-wrap: wrap; }
 .pill-link { border: 1px solid #444; border-radius: 999px; padding: 8px 14px; color: #fff; font-weight: 600; }
 .pill-link:hover { background: #fff; color: var(--ink); }
+/* Botón del panel en el pie de página */
+.admin-entry { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 8px 16px 8px 10px; background: rgba(255, 255, 255, .08); color: #fff; font-weight: 700; font-size: 13px; border: 1px solid #3a3438; }
+.admin-entry:hover { background: var(--accent); border-color: var(--accent); }
+.admin-entry svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
 
 /* WhatsApp + cookies */
 .whatsapp { position: fixed; left: 20px; bottom: 20px; z-index: 45; display: flex; align-items: center; gap: 10px; background: #25d366; color: #fff; border-radius: 999px; padding: 10px 18px 10px 10px; font-weight: 700; box-shadow: 0 10px 30px rgba(37, 211, 102, .35); transition: .2s; }
