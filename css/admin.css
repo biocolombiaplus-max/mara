@@ -267,3 +267,6 @@ body.is-admin { background: #f6f3f1; }
 .adm-modal__actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .adm-modal__actions .btn { height: 48px; }
 .adm-modal__actions .is-done { background: var(--ok); }
+
+.adm-logo { flex-direction: column; align-items: flex-start; gap: 6px; }
+.adm-logo img { height: 64px; width: auto; }

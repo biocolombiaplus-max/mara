@@ -701,3 +701,9 @@ p { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Logo de la marca (imagen) */
+.logo__img { height: 54px; width: auto; display: block; }
+.footer .logo__img { height: 76px; }
+.drawer .logo__img { height: 44px; }
+@media (max-width: 960px) { .header .logo__img { height: 42px; } }

@@ -1,5 +1,5 @@
 /* =========================================================================
-   MARA Sport · Panel administrativo
+   MARA Originals · Panel administrativo
    - Acceso con clave (por defecto 123456; cámbiala con ADMIN_PASSWORD en Vercel)
    - Productos: crear, editar, ocultar, precios, tallas y stock
    - Estudio de fotos: quita el fondo y crea tomas de estudio gratis en el
@@ -292,7 +292,7 @@
       : '<a href="#/admin/ajustes" class="adm-mode adm-mode--demo">● Modo demo: cambios solo en este navegador</a>';
     return `<div class="adm">
       <aside class="adm-side">
-        <a href="#/admin" class="adm-logo"><span class="logo__mark">MARA</span><small>Panel</small></a>
+        <a href="#/admin" class="adm-logo"><img src="img/marca/logo-oscuro.svg" alt="MARA Originals" width="120" height="76"><small>Panel</small></a>
         <nav>${nav.map(([h, l, i]) => `<a href="#/admin${h ? '/' + h : ''}" class="${active === h ? 'is-on' : ''}">${i}<span>${l}</span></a>`).join('')}</nav>
         <div class="adm-side__foot">
           <a href="#/" target="_blank" rel="noopener">${IC.eye}<span>Ver tienda</span></a>
@@ -313,7 +313,7 @@
     mount(`<div class="adm-login">
       <form class="adm-login__card" id="admLogin" autocomplete="off">
         <div class="adm-login__icon">${IC.lock}</div>
-        <a href="#/" class="logo"><span class="logo__mark">MARA</span><span class="logo__sub">SPORT</span></a>
+        <a href="#/" class="logo"><img src="img/marca/logo.svg" alt="MARA Originals" style="height:96px;width:auto"></a>
         <h1>Panel administrativo</h1>
         <p>Ingresa tu clave para administrar productos, fotos y pedidos.</p>
         <label class="adm-field"><span>Clave</span><input type="password" name="pass" inputmode="numeric" placeholder="••••••" required autofocus></label>
@@ -873,7 +873,7 @@ REGLAS ESTRICTAS (lo más importante):
           <div class="adm-card__head"><h2>${sel.id}</h2><a href="#/admin/pedidos" class="icon-btn" aria-label="Cerrar">✕</a></div>
           <label class="adm-field"><span>Estado del pedido</span><select id="admStatus">${Object.entries(STATUS).map(([k, [l]]) => `<option value="${k}" ${sel.status === k ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
           <div class="adm-odetail__block"><h3>Cliente</h3><p><b>${esc((sel.customer && sel.customer.name) || sel.name || '')}</b><br>${esc((sel.customer && sel.customer.email) || sel.email || '')}<br>${esc((sel.customer && sel.customer.phone) || '')}${sel.customer && sel.customer.doc ? '<br>Doc. ' + esc(sel.customer.doc) : ''}</p>
-            ${sel.customer && sel.customer.phone ? `<a class="btn btn--sm" style="background:#25d366" target="_blank" rel="noopener" href="https://wa.me/57${esc(sel.customer.phone)}?text=${encodeURIComponent(`Hola ${((sel.customer.name || '').split(' ')[0])}, te escribimos de MARA Sport sobre tu pedido ${sel.id} 💗`)}">Escribir por WhatsApp</a>` : ''}</div>
+            ${sel.customer && sel.customer.phone ? `<a class="btn btn--sm" style="background:#25d366" target="_blank" rel="noopener" href="https://wa.me/57${esc(sel.customer.phone)}?text=${encodeURIComponent(`Hola ${((sel.customer.name || '').split(' ')[0])}, te escribimos de MARA Originals sobre tu pedido ${sel.id} 💗`)}">Escribir por WhatsApp</a>` : ''}</div>
           <div class="adm-odetail__block"><h3>Entrega</h3><p>${ship[sel.ship] || ''}<br>${esc(sel.addr || '')}<br>${esc(sel.city || '')}, ${esc(sel.dep || '')}</p></div>
           <div class="adm-odetail__block"><h3>Productos</h3>${(sel.items || []).map((l) => `<div class="adm-oitem"><span>${l.qty} × ${esc(l.name)}<small>${esc(l.color || '')} · Talla ${esc(l.size || '')}</small></span><b>${fmt((l.price || 0) * l.qty)}</b></div>`).join('')}
             <div class="adm-oitem adm-oitem--total"><span>Total · ${pay[sel.pay] || ''}</span><b>${fmt((sel.totals && sel.totals.total) || 0)}</b></div></div>

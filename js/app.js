@@ -1,5 +1,5 @@
 /* =========================================================================
-   MARA Sport · Lógica de la tienda (SPA sin dependencias)
+   MARA Originals · Lógica de la tienda (SPA sin dependencias)
    ========================================================================= */
 (function () {
   'use strict';
@@ -763,7 +763,7 @@
     const ci = Math.min(+(q.c || 0), p.colors.length - 1);
     let size = null;
     setProductLD(p);
-    document.title = `${p.brandName} ${p.name} · MARA Sport`;
+    document.title = `${p.brandName} ${p.name} · MARA Originals`;
     track('view_item', [{ p, color: p.colors[ci].name }], { value: p.price });
     // Vistos recientemente
     const seen = store.get('mara_seen', []).filter((x) => x !== p.id); seen.unshift(p.id); store.set('mara_seen', seen.slice(0, 12));
@@ -1120,9 +1120,9 @@
       <table><tr><th>Destino</th><th>Tiempo</th></tr><tr><td>Bogotá, Medellín, Cali, Barranquilla y áreas metropolitanas</td><td>1 a 2 días hábiles</td></tr><tr><td>Ciudades intermedias</td><td>2 a 4 días hábiles</td></tr><tr><td>Municipios y zonas rurales</td><td>3 a 7 días hábiles</td></tr></table>
       <p>Envío Express 24 horas disponible en ciudades principales por ${fmt(SHIP_EXP)}.</p>`],
     tallas: ['Guía de tallas', sizeTable()],
-    pagos: ['Medios de pago', `<p>Aceptamos tarjetas de crédito y débito (Visa, Mastercard, American Express, Diners), PSE, Nequi, Daviplata, Addi (3 cuotas sin interés en tu primera compra), Efecty y pago contraentrega en ciudades principales.</p><p>Todos los pagos se procesan a través de una pasarela certificada PCI DSS. MARA Sport nunca almacena los datos de tu tarjeta.</p>`],
-    terminos: ['Términos y condiciones', `<p>Estos términos regulan el uso del sitio y las compras realizadas en MARA Sport S.A.S. Los precios incluyen IVA y están expresados en pesos colombianos (COP). Las promociones son válidas hasta agotar existencias y no son acumulables salvo indicación expresa.</p><p><i>Plantilla de referencia: revísala con tu asesor legal antes de publicar.</i></p>`],
-    privacidad: ['Política de tratamiento de datos', `<p>En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, MARA Sport S.A.S. informa que los datos personales recolectados serán tratados para gestionar compras, envíos, facturación, atención al cliente y, con tu autorización, envío de comunicaciones comerciales.</p><p>Como titular puedes conocer, actualizar, rectificar y suprimir tus datos escribiendo a datos@marasport.co.</p><p><i>Plantilla de referencia: revísala con tu asesor legal antes de publicar.</i></p>`],
+    pagos: ['Medios de pago', `<p>Aceptamos tarjetas de crédito y débito (Visa, Mastercard, American Express, Diners), PSE, Nequi, Daviplata, Addi (3 cuotas sin interés en tu primera compra), Efecty y pago contraentrega en ciudades principales.</p><p>Todos los pagos se procesan a través de una pasarela certificada PCI DSS. MARA Originals nunca almacena los datos de tu tarjeta.</p>`],
+    terminos: ['Términos y condiciones', `<p>Estos términos regulan el uso del sitio y las compras realizadas en MARA Originals S.A.S. Los precios incluyen IVA y están expresados en pesos colombianos (COP). Las promociones son válidas hasta agotar existencias y no son acumulables salvo indicación expresa.</p><p><i>Plantilla de referencia: revísala con tu asesor legal antes de publicar.</i></p>`],
+    privacidad: ['Política de tratamiento de datos', `<p>En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, MARA Originals S.A.S. informa que los datos personales recolectados serán tratados para gestionar compras, envíos, facturación, atención al cliente y, con tu autorización, envío de comunicaciones comerciales.</p><p>Como titular puedes conocer, actualizar, rectificar y suprimir tus datos escribiendo a datos@marasport.co.</p><p><i>Plantilla de referencia: revísala con tu asesor legal antes de publicar.</i></p>`],
     retracto: ['Derecho de retracto', `<p>De acuerdo con el artículo 47 de la Ley 1480 de 2011, en las compras realizadas por medios no tradicionales o a distancia puedes ejercer el derecho de retracto dentro de los <b>5 días hábiles</b> siguientes a la entrega del producto. Te devolveremos el dinero dentro de los 30 días calendario siguientes.</p><a class="btn" href="https://wa.me/${WHATSAPP}?text=Quiero%20ejercer%20mi%20derecho%20de%20retracto" target="_blank" rel="noopener">Solicitar retracto</a>`],
     reversion: ['Reversión del pago', `<p>Conforme al artículo 51 de la Ley 1480 de 2011 y el Decreto 587 de 2016, puedes solicitar la reversión del pago cuando seas víctima de fraude, la operación no haya sido solicitada, el producto no haya sido recibido o no corresponda a lo solicitado o sea defectuoso. Debes presentar la queja dentro de los 5 días hábiles siguientes.</p>`],
     pqrs: ['PQRS', `<p>Radica tus peticiones, quejas, reclamos o sugerencias. Te responderemos en máximo 15 días hábiles.</p>
@@ -1201,15 +1201,15 @@
     const seg = path.split('/').filter(Boolean);
     const app = $('#app');
     let html, init;
-    document.title = 'MARA Sport · Tenis y ropa deportiva multimarca en Colombia';
+    document.title = 'MARA Originals · Tenis y ropa deportiva multimarca en Colombia';
 
     if (!seg.length) { html = viewHome(); init = initHome; }
-    else if (seg[0] === 'tienda') { html = viewPLP(q); init = () => initPLP(q); document.title = `${plpTitle(q).replace(/&[^;]+;|“|”/g, '')} · MARA Sport`; }
+    else if (seg[0] === 'tienda') { html = viewPLP(q); init = () => initPLP(q); document.title = `${plpTitle(q).replace(/&[^;]+;|“|”/g, '')} · MARA Originals`; }
     else if (seg[0] === 'p') {
       const p = bySlug(seg[1]);
       if (p) { html = viewPDP(p, q); init = () => initPDP(p, q); } else html = view404();
     }
-    else if (seg[0] === 'checkout') { html = viewCheckout(); init = initCheckout; document.title = 'Pago seguro · MARA Sport'; }
+    else if (seg[0] === 'checkout') { html = viewCheckout(); init = initCheckout; document.title = 'Pago seguro · MARA Originals'; }
     else if (seg[0] === 'gracias') { html = viewThanks(seg[1]); }
     else if (seg[0] === 'favoritos') { html = viewWish(); }
     else if (seg[0] === 'rastreo') {
