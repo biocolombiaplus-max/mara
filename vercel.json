@@ -1,0 +1,12 @@
+{
+  "headers": [
+    {
+      "source": "/enlaces/(.*)\\.vcf",
+      "headers": [
+        { "key": "Content-Type", "value": "text/vcard; charset=utf-8" },
+        { "key": "Content-Disposition", "value": "inline; filename=\"MARA-Originals.vcf\"" },
+        { "key": "Cache-Control", "value": "public, max-age=300" }
+      ]
+    }
+  ]
+}

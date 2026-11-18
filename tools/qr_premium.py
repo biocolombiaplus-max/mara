@@ -14,7 +14,7 @@ URL = 'https://mara-lovat.vercel.app/enlaces/'
 F = '/usr/share/fonts/opentype/inter/'
 NAVY = (13, 31, 92); NAVY2 = (22, 44, 120); GOLD = (214, 172, 92); GOLD_L = (244, 219, 154); GOLD_D = (168, 124, 52)
 CREAM = (250, 246, 240); WHITE = (255, 255, 255)
-LOGO = 'img/marca/logo-oscuro.png'
+LOGO = 'img/marca/logo-premium-fade.webp'
 ICON = 'img/marca/icono.png'
 f = lambda n, s: ImageFont.truetype(F + n, s)
 
@@ -122,7 +122,7 @@ def card(W, H, name, logo_w, qr_px, title_size, top, gap):
     text_c(d, y, 'WhatsApp  ·  Instagram  ·  Asesoría de talla', f('Inter-Medium.otf', int(title_size * .55)), (205, 213, 240), W)
     y += int(title_size * 1.5)
     pw = qr_px + 2 * int(qr_px * .07)
-    y = panel_qr(im, (W - pw) // 2, y, qr_px) + int(gap * 1.1)
+    y = panel_qr(im, (W - pw) // 2, y, qr_px) + 64
     text_c(d, y, 'Moda y ropa deportiva para mujer · 100% original', f('Inter-SemiBold.otf', int(title_size * .55)), WHITE, W)
     y += int(title_size * 1.1)
     gold_text(im, y, '@mara_originals   ·   323 208 6370', f('Inter-Bold.otf', int(title_size * .62)))
@@ -142,8 +142,8 @@ def verify(path):
 
 
 if __name__ == '__main__':
-    card(1200, 1650, 'qr-tarjeta-premium', 520, 560, 46, 120, 46)       # vertical: imprimir / mostrador
-    card(1080, 1920, 'qr-historia-instagram', 560, 620, 46, 230, 70)    # historia de Instagram / WhatsApp
+    card(1200, 1650, 'qr-tarjeta-premium', 760, 560, 46, 30, 6)       # vertical: imprimir / mostrador
+    card(1080, 1920, 'qr-historia-instagram', 760, 620, 46, 150, 20)    # historia de Instagram / WhatsApp
     sq = Image.new('RGB', (1200, 1200), CREAM); sq.paste(qr_art(1100), (50, 50)); sq.save(f'{OUT}/qr-tarjeta-sticker.png', optimize=True)
     for n in ('qr-tarjeta-premium', 'qr-historia-instagram', 'qr-tarjeta-sticker'):
         print(n, verify(f'{OUT}/{n}.png'))

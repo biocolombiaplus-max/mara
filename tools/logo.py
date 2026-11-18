@@ -39,7 +39,7 @@ def build(theme):
     mara_d, mara_w = text_path('InterDisplay-BlackItalic.otf', 'MARA', 300, 0, 0, stretch=1.22, tracking=-6)
     org_d, org_w = text_path('Inter-BoldItalic.otf', 'ORIGINALS', 100, 0, 0, stretch=1.12, tracking=20)
     mx = (W - mara_w) / 2; ox = (W - org_w) / 2
-    wing_start = '#1C2B78' if theme == 'light' else '#5B78F0'
+    wing_start = '#A87C34'  # ala dorada, como el logo premium
     shadow = '' if theme == 'dark' else '<feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#5a4320" flood-opacity=".22"/>'
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">
   <defs>
@@ -51,8 +51,8 @@ def build(theme):
       <stop offset="0" stop-color="#C79A4E"/><stop offset=".5" stop-color="#F2D995"/><stop offset="1" stop-color="#B8893F"/>
     </linearGradient>
     <linearGradient id="ala" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0" stop-color="{wing_start}"/><stop offset=".55" stop-color="{wing_start}"/>
-      <stop offset=".72" stop-color="#C9A055"/><stop offset=".88" stop-color="#F5DFA3"/><stop offset="1" stop-color="#B98A3E"/>
+      <stop offset="0" stop-color="{wing_start}"/><stop offset=".35" stop-color="#D2A65A"/>
+      <stop offset=".62" stop-color="#F5DFA3"/><stop offset=".82" stop-color="#C9A055"/><stop offset="1" stop-color="#E9C77E"/>
     </linearGradient>
     {('<filter id="sombra" x="-10%" y="-10%" width="120%" height="140%">' + shadow + '</filter>') if shadow else ''}
   </defs>
@@ -81,7 +81,7 @@ def main():
         open(f'{OUT}/{name}.svg', 'w').write(svg)
         cairosvg.svg2png(bytestring=svg.encode(), write_to=f'{OUT}/{name}.png', output_width=1200)
     # Foto de perfil (cuadrada) en blanco y en azul marino
-    for bg, src, nm in ((('#FFFFFF'), 'logo.png', 'perfil-blanco.png'), ('#0D1F5C', 'logo-oscuro.png', 'perfil-azul.png')):
+    for bg, src, nm in ((('#FFFFFF'), 'logo.png', 'perfil-blanco.png'),):
         sq = Image.new('RGB', (1080, 1080), bg); lg = Image.open(f'{OUT}/{src}').convert('RGBA')
         lg = lg.resize((900, int(lg.height * 900 / lg.width)), Image.LANCZOS)
         sq.paste(lg, ((1080 - lg.width) // 2, (1080 - lg.height) // 2 + 20), lg); sq.save(f'{OUT}/{nm}', optimize=True)

@@ -10,15 +10,15 @@
   <meta property="og:site_name" content="MARA Originals">
   <meta property="og:title" content="MARA Originals · Ropa original para mujer">
   <meta property="og:description" content="Nike, Adidas, Zara, Stradivarius y jeans 100% originales. Escríbenos por WhatsApp y te asesoramos.">
-  <meta property="og:image" content="https://mara-lovat.vercel.app/enlaces/og.png">
+  <meta property="og:image" content="https://mara-lovat.vercel.app/enlaces/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://mara-lovat.vercel.app/enlaces/">
   <meta property="og:locale" content="es_CO">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="../img/marca/icono.png">
-  <link rel="apple-touch-icon" href="../img/marca/icono.png">
-  <link rel="preload" as="image" href="../img/marca/logo-oscuro.svg">
+  <link rel="apple-touch-icon" href="../img/marca/icono-180.png">
+  <link rel="preload" as="image" href="../img/marca/logo-premium-fade-sm.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -30,7 +30,7 @@
     "description": "Moda y ropa deportiva para mujer 100% original: Nike, Adidas, Zara, Stradivarius y jeans.",
     "url": "https://mara-lovat.vercel.app/",
     "logo": "https://mara-lovat.vercel.app/img/marca/logo.png",
-    "image": "https://mara-lovat.vercel.app/enlaces/og.png",
+    "image": "https://mara-lovat.vercel.app/enlaces/og.jpg",
     "telephone": "+57 323 208 6370",
     "areaServed": "CO",
     "sameAs": ["https://www.instagram.com/mara_originals"]
@@ -54,10 +54,10 @@
     .card { width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
 
     .hero { position: relative; width: 100%; padding: 28px 18px 22px; border-radius: 28px;
-      background: linear-gradient(160deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .03));
+      background: radial-gradient(80% 60% at 50% 30%, #1d3270 0%, #142659 60%, #0f1f4f 100%);
       border: 1px solid rgba(214, 172, 92, .35); box-shadow: 0 30px 60px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .12); overflow: hidden; }
     .hero::before { content: ''; position: absolute; inset: -40% -20% auto; height: 70%; background: radial-gradient(closest-side, rgba(244, 219, 154, .28), transparent); pointer-events: none; }
-    .logo { position: relative; width: 250px; max-width: 78%; height: auto; display: block; margin: 4px auto 0; filter: drop-shadow(0 10px 22px rgba(0, 0, 0, .35)); }
+    .logo { position: relative; width: 340px; max-width: 100%; height: auto; display: block; margin: -22px auto -30px; }
     .verified { position: relative; display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; font-size: 12px; font-weight: 700; letter-spacing: .3px; padding: 6px 12px; border-radius: 999px; color: var(--ink); background: linear-gradient(135deg, var(--gold-l), var(--gold) 55%, var(--gold-d)); }
     .verified svg { width: 14px; height: 14px; }
     .tagline { position: relative; margin: 14px auto 0; color: #d6dcf3; font-size: 15px; line-height: 1.55; max-width: 340px; }
@@ -111,6 +111,24 @@
       .tabs button { font: 600 12.5px Inter, sans-serif; color: #fff; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .15); padding: 7px 12px; border-radius: 999px; cursor: pointer; }
       .tabs button.on { background: var(--gold); color: var(--ink); border-color: var(--gold); }
     }
+
+    /* Ventana: guardar contacto */
+    .sheet { position: fixed; inset: 0; z-index: 20; display: grid; align-items: end; justify-items: center; background: rgba(5, 10, 30, .6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); padding: 0; }
+    .sheet[hidden] { display: none; }
+    .sheet__box { position: relative; width: 100%; max-width: 460px; background: linear-gradient(180deg, #16296a, #0d1f5c); border: 1px solid rgba(214, 172, 92, .45); border-bottom: 0; border-radius: 26px 26px 0 0; padding: 26px 18px calc(22px + env(safe-area-inset-bottom)); display: grid; gap: 12px; animation: up .35s cubic-bezier(.2,.7,.2,1); box-shadow: 0 -20px 60px rgba(0, 0, 0, .4); }
+    @keyframes up { from { transform: translateY(100%); } }
+    @media (min-width: 600px) { .sheet { align-items: center; padding: 16px; } .sheet__box { border-radius: 26px; border-bottom: 1px solid rgba(214, 172, 92, .45); } }
+    .sheet__x { position: absolute; right: 12px; top: 12px; width: 36px; height: 36px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .1); color: #fff; font-size: 16px; cursor: pointer; }
+    .vc { display: flex; gap: 14px; align-items: center; text-align: left; padding-right: 40px; }
+    .vc img { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); box-shadow: 0 0 0 5px rgba(214, 172, 92, .15); }
+    .vc b { display: block; font-size: 20px; }
+    .vc span { font-size: 13px; color: #c3cbea; }
+    .vc-rows { display: grid; gap: 1px; background: rgba(255, 255, 255, .1); border-radius: 16px; overflow: hidden; text-align: left; }
+    .vc-rows div { background: rgba(13, 31, 92, .92); padding: 12px 16px; }
+    .vc-rows small { display: block; font-size: 11.5px; color: var(--gold); font-weight: 700; letter-spacing: .6px; text-transform: uppercase; }
+    .vc-rows b { font-size: 16px; }
+    .sheet__hint { margin: 0; text-align: left; font-size: 13.5px; line-height: 1.5; background: rgba(214, 172, 92, .14); border: 1px solid rgba(214, 172, 92, .4); border-radius: 14px; padding: 12px 14px; color: #f4e6c4; }
+    .sheet__hint b { color: #fff; }
     .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 150%); background: #fff; color: var(--ink); padding: 12px 18px; border-radius: 12px; font-weight: 600; font-size: 14px; transition: transform .3s, visibility .3s; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); z-index: 9; visibility: hidden; }
     .toast.show { transform: translate(-50%, 0); visibility: visible; }
     .fade { opacity: 0; transform: translateY(12px); animation: in .6s forwards; }
@@ -122,7 +140,7 @@
   <div class="wrap">
     <main class="card">
       <section class="hero fade">
-        <img class="logo" src="../img/marca/logo-oscuro.svg" alt="MARA Originals" width="250" height="158">
+        <img class="logo" src="../img/marca/logo-premium-fade-sm.webp" alt="MARA Originals" width="700" height="517">
         <span class="verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg> Tienda 100% original</span>
         <p class="tagline">Moda y ropa deportiva para mujer, <b>seleccionada con estilo</b>. Te asesoramos con tu talla y enviamos a toda Colombia ✨</p>
         <div class="brands"><span>Nike</span><span>Adidas</span><span>Zara</span><span>Stradivarius</span><span>Jeans</span><span>y más</span></div>
@@ -172,7 +190,7 @@
       </div>
 
       <div class="row">
-        <a class="btn" data-ev="contacto" href="mara-originals.vcf" download>📇 Guardar contacto</a>
+        <button class="btn" id="saveContact" type="button">📇 Guardar contacto</button>
         <button class="btn" id="share" type="button">↗ Compartir</button>
       </div>
 
@@ -185,6 +203,29 @@
       <div class="tabs"><button class="on" data-qr="whatsapp">WhatsApp</button><button data-qr="instagram">Instagram</button></div>
       <img id="qr" src="../img/qr/qr-whatsapp-solo.png" alt="Código QR de WhatsApp" width="260" height="260" loading="lazy">
     </aside>
+  </div>
+
+  <div class="sheet" id="sheet" hidden>
+    <div class="sheet__box" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <button class="sheet__x" id="sheetClose" aria-label="Cerrar">✕</button>
+      <div class="vc">
+        <img src="../img/marca/icono-180.png" alt="" width="84" height="84">
+        <div><b id="sheetTitle">MARA Originals</b><span>Moda y ropa deportiva original para mujer</span></div>
+      </div>
+      <div class="vc-rows">
+        <div><small>Celular · WhatsApp</small><b>+57 323 208 6370</b></div>
+        <div><small>Instagram</small><b>@mara_originals</b></div>
+      </div>
+      <p class="sheet__hint" id="sheetHint" hidden></p>
+      <a class="btn btn--gold" id="vcfBtn" href="mara-originals.vcf">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/><path d="M19 3v6M16 6h6"/></svg></span>
+        <div>Guardar en mis contactos<small id="vcfSub">Se guarda con el logo, el número e Instagram</small></div>
+      </a>
+      <div class="row">
+        <button class="btn" id="copyNum" type="button">📋 Copiar número</button>
+        <a class="btn" data-app="wa" data-text="Hola%20MARA%20Originals%20%F0%9F%92%97" href="https://wa.me/573232086370?text=Hola%20MARA%20Originals%20%F0%9F%92%97" target="_blank" rel="noopener">💬 Abrir chat</a>
+      </div>
+    </div>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -243,6 +284,43 @@
         });
       });
 
+
+      // ---------- Guardar contacto ----------
+      var VCF = 'https://mara-lovat.vercel.app/enlaces/mara-originals.vcf';
+      var inApp = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|TikTok|musical_ly|Line\//i.test(ua);
+      var sheet = document.getElementById('sheet');
+      function openSheet() {
+        var hint = document.getElementById('sheetHint'), sub = document.getElementById('vcfSub');
+        hint.hidden = true;
+        if (inApp && ios) {
+          hint.hidden = false;
+          hint.innerHTML = 'Estás dentro de Instagram, que no deja guardar contactos. Toca <b>⋯</b> arriba a la derecha → <b>Abrir en el navegador</b> y vuelve a tocar <b>Guardar contacto</b>. O usa <b>Copiar número</b>.';
+          sub.textContent = 'Primero ábrelo en Safari';
+        } else if (ios) sub.textContent = 'Se abre la ficha: toca “Crear nuevo contacto”';
+        else if (android) sub.textContent = inApp ? 'Se abre en Chrome para guardarlo' : 'Abre el archivo y elige “Contactos”';
+        sheet.hidden = false;
+        window.dataLayer.push({ event: 'contact_open' });
+      }
+      function closeSheet() { sheet.hidden = true; }
+      document.getElementById('saveContact').addEventListener('click', openSheet);
+      document.getElementById('sheetClose').addEventListener('click', closeSheet);
+      sheet.addEventListener('click', function (e) { if (e.target === sheet) closeSheet(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
+      document.getElementById('vcfBtn').addEventListener('click', function (e) {
+        window.dataLayer.push({ event: 'contact_save' });
+        if (android && inApp) { e.preventDefault(); location.href = 'intent://' + VCF.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' + encodeURIComponent(VCF) + ';end'; return; }
+        if (!android && !ios) { // computador: descarga el archivo
+          e.preventDefault(); var a = document.createElement('a'); a.href = 'mara-originals.vcf'; a.download = 'MARA-Originals.vcf'; document.body.appendChild(a); a.click(); a.remove();
+          toast('✓ Contacto descargado'); return;
+        }
+        // iPhone (Safari) y Android: abrir el archivo muestra la ficha para guardar
+        e.preventDefault(); location.href = VCF;
+      });
+      document.getElementById('copyNum').addEventListener('click', function () {
+        var n = '+57 323 208 6370', ok = function () { toast('✓ Número copiado'); };
+        if (navigator.clipboard) navigator.clipboard.writeText(n).then(ok, function () { toast(n); });
+        else toast(n);
+      });
       function toast(t) { var el = document.getElementById('toast'); el.textContent = t; el.classList.add('show'); setTimeout(function () { el.classList.remove('show'); }, 2400); }
       document.getElementById('share').addEventListener('click', function () {
         var data = { title: 'MARA Originals', text: 'Ropa original para mujer: Nike, Adidas, Zara, Stradivarius y jeans 💗', url: location.href.split('#')[0] };
