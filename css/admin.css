@@ -166,6 +166,9 @@ body.is-admin { background: #f6f3f1; }
 .adm-range { display: grid; gap: 6px; margin-top: 10px; }
 .adm-range input { accent-color: var(--accent); }
 .adm-range small { color: var(--muted); }
+.adm-free { margin: 6px 0 12px; padding-left: 20px; display: grid; gap: 8px; font-size: 14px; }
+.adm-check { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; margin-top: 12px; cursor: pointer; }
+.adm-check input { accent-color: var(--accent); margin-top: 2px; }
 .adm-shots { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 
 .adm-colors { display: grid; gap: 8px; }

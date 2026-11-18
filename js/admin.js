@@ -486,15 +486,25 @@
                 <label class="adm-modecard"><input type="radio" name="pmode" value="mejorar"><div><b>Solo mejorar</b><small>Gratis · recorta cuadrado y mejora color y nitidez, sin quitar el fondo. Para fotos con modelo o en ambiente.</small></div></label>
                 <label class="adm-modecard ${state.gemini ? '' : 'is-off'}"><input type="radio" name="pmode" value="estudio-ia" ${state.gemini ? '' : 'disabled'}><div><b>Estudio con IA ✨</b><small>Gemini · reconstruye una foto de estudio perfecta respetando el producto. ${state.gemini ? '' : '<a href="#/admin/ajustes" class="adm-link">Conectar Gemini</a>'}</small></div></label>
               </div>
+              <label class="adm-check"><input type="checkbox" id="admIsAi"> Fotos creadas con IA (se mostrará el aviso "imagen referencial creada con IA")</label>
               <details class="adm-adv"><summary>Ajuste fino del recorte</summary>
                 <label class="adm-range">Sensibilidad para quitar el fondo <input type="range" id="admSens" min="0.6" max="1.6" step="0.05" value="1"><small>Súbela si queda fondo; bájala si se borra parte del producto.</small></label>
               </details>
             </div>
             <div class="adm-ai">
-              <div class="adm-studio__head">${IC.spark}<div><b>Fotos con modelo (IA)</b><span>Gemini crea fotos de una modelo usando este producto exacto, a partir de las fotos de arriba. Se marcan como "imagen referencial creada con IA".</span></div></div>
+              <div class="adm-studio__head">${IC.spark}<div><b>Fotos con modelo (IA) · gratis con tu app de Gemini</b><span>Elige las tomas, copia el prompt y pégalo en Gemini junto con la foto del producto.</span></div></div>
               <div class="adm-shots">${shots.map(([v, l], i) => `<label class="chip"><input type="checkbox" value="${v}" ${i < 3 ? 'checked' : ''}> ${l}</label>`).join('')}</div>
-              <button class="btn btn--dark btn--sm" id="admAiModel" ${state.gemini && c.img.length ? '' : 'disabled'}>${IC.spark} Crear fotos con modelo</button>
-              ${!state.gemini ? '<p class="adm-hint">Requiere conectar la clave de Gemini. <a class="adm-link" href="#/admin/ajustes">Ver cómo</a></p>' : !c.img.length ? '<p class="adm-hint">Primero sube al menos una foto del producto.</p>' : ''}
+              <ol class="adm-free">
+                <li><button class="btn btn--accent btn--sm" id="admCopyPrompt">📋 Copiar prompt para Gemini</button></li>
+                <li>Abre <a class="adm-link" href="https://gemini.google.com/app" target="_blank" rel="noopener">gemini.google.com</a>, adjunta la foto de estudio del producto (descárgala abajo), pega el prompt y envía.</li>
+                <li>Descarga la foto que te guste y súbela aquí arriba eligiendo <b>"Solo mejorar"</b> y marcando <b>"Fotos creadas con IA"</b>.</li>
+              </ol>
+              ${c.img.length ? `<a class="adm-link" href="${c.img[0]}" download="producto-${esc(D.slugify(d.name || 'foto'))}.jpg" target="_blank" rel="noopener">⬇ Descargar foto principal para adjuntarla en Gemini</a>` : '<p class="adm-hint">Primero sube al menos una foto del producto.</p>'}
+              <details class="adm-adv"><summary>Automático con clave de API (de pago en Google)</summary>
+                <p class="adm-hint">Crea las fotos sin salir del panel, pero Google cobra la clave aparte (unos centavos por foto).</p>
+                <button class="btn btn--dark btn--sm" id="admAiModel" ${state.gemini && c.img.length ? '' : 'disabled'} style="margin-top:8px">${IC.spark} Crear fotos automáticamente</button>
+                ${!state.gemini ? '<p class="adm-hint">Requiere la clave de Gemini con facturación. <a class="adm-link" href="#/admin/ajustes">Ver cómo</a></p>' : ''}
+              </details>
             </div>
           </section>
 
@@ -619,6 +629,7 @@
       el.addEventListener('drop', (e) => { e.preventDefault(); const to = +el.dataset.ph; if (dragFrom === null || dragFrom === to) return; const [a] = c.img.splice(dragFrom, 1); const [t] = c.thumb.splice(dragFrom, 1); c.img.splice(to, 0, a); c.thumb.splice(to, 0, t); dragFrom = null; state.dirty = true; drawEditor(); });
     });
     const aiBtn = $('#admAiModel'); if (aiBtn) aiBtn.onclick = aiModelPhotos;
+    const cp = $('#admCopyPrompt'); if (cp) cp.onclick = copyPrompt;
     if (state.dirty) $('#admSavebar').hidden = false;
   }
 
@@ -638,7 +649,8 @@
     const d = state.draft; const ci = state.colorIdx; const c = d.colors[ci];
     const mode = ($('input[name=pmode]:checked') || {}).value || 'estudio';
     const sens = +($('#admSens') || {}).value || 1;
-    const base = D.slugify((d.name || 'producto') + '-' + (c.name || ''));
+    const isAi = !!($('#admIsAi') || {}).checked;
+    const base = (isAi ? 'modelo-' : '') + D.slugify((d.name || 'producto') + '-' + (c.name || ''));
     const steps = files.map((f) => ({ label: f.name, state: 'run', msg: 'Procesando…' }));
     progress(steps);
     state.raw[ci] = state.raw[ci] || [];
@@ -700,6 +712,43 @@
     const r = await api('POST', '/api/generate', { mode, shot, prenda, images });
     if (!r.ok) throw new Error(r.data.error || 'Gemini no pudo crear la foto');
     return r.data.url || r.data.dataUrl;
+  }
+
+  const SHOT_TXT = {
+    frente: 'foto de cuerpo entero, de frente, la modelo de pie con postura segura, fondo de estudio liso color crema claro (#F7F2EF), sombra suave en el piso',
+    'tres-cuartos': 'foto de 3/4 de perfil, la modelo caminando hacia la cámara, fondo de estudio crema claro, encuadre de la cabeza a las rodillas, mostrando bien el lado del logo',
+    detalle: 'primer plano de la prenda puesta, encuadre ajustado a la zona del producto, fondo de estudio crema claro; las manos no tapan textos ni logos',
+    gym: 'foto lifestyle en un gimnasio moderno y luminoso con luz natural, la modelo entrenando (sentadilla o estiramiento), el producto claramente visible, fondo desenfocado',
+    outdoor: 'foto lifestyle al aire libre en un parque urbano de Bogotá en la mañana, la modelo trotando, luz dorada suave, el producto claramente visible, fondo desenfocado'
+  };
+  function buildPrompt() {
+    const d = state.draft; const c = d.colors[state.colorIdx];
+    const sub = (D.SUBS.find((s) => s.id === d.sub) || {}).name || 'prenda';
+    const brand = (D.BRANDS.find((b) => b.id === d.brand) || {}).name || '';
+    const shots = $$('.adm-shots input:checked').map((i) => i.value);
+    const list = (shots.length ? shots : ['frente']).map((s, i) => `${i + 1}. ${SHOT_TXT[s]}.`).join('\n');
+    return `La imagen adjunta muestra un producto real: ${sub.toLowerCase()} ${brand} "${d.name}", color ${c.name}.${d.desc ? ' ' + d.desc : ''}
+
+Crea ${shots.length > 1 ? shots.length + ' fotografías profesionales distintas' : 'una fotografía profesional'} de e-commerce de una gran marca deportiva, con una modelo usando ESTE producto exacto:
+${list}
+
+REGLAS ESTRICTAS (lo más importante):
+- El producto debe verse EXACTAMENTE igual al de la foto: mismo color y tono, misma tela, mismo largo y proporciones, mismas costuras, mismo texto y tipografía, mismo logo en el mismo lugar y tamaño.
+- No agregues, quites ni muevas logos, textos, bolsillos ni detalles. No cambies el corte.
+- No muestres partes del producto que no se ven en la foto (por ejemplo la espalda).
+- Modelo: mujer latinoamericana adulta, atlética y natural, piel con textura real, manos y anatomía correctas.
+- El resto de su ropa, liso y neutro (negro o blanco), sin logos de ninguna marca.
+- Luz suave de estudio, lente 85 mm, colores fieles, alta nitidez, formato cuadrado 1:1, sin texto ni marcas de agua.`;
+  }
+  async function copyPrompt() {
+    const text = buildPrompt();
+    try { await navigator.clipboard.writeText(text); toast('✓ Prompt copiado. Pégalo en Gemini con la foto del producto'); }
+    catch (e) {
+      const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); toast('✓ Prompt copiado'); } catch (err) { prompt('Copia este texto:', text); }
+      ta.remove();
+    }
+    window.open('https://gemini.google.com/app', '_blank', 'noopener');
   }
 
   async function aiModelPhotos() {
