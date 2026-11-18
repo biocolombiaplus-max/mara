@@ -61,9 +61,13 @@ export default async function handler(req, res) {
     const j = await r.json().catch(() => ({}));
     if (r.status === 404) { lastErr = `Modelo ${model} no disponible`; continue; }
     if (!r.ok) {
-      const msg = (j.error && j.error.message) || r.statusText;
-      const hint = r.status === 429 ? ' — Activa la facturación de tu proyecto en Google AI Studio (el plan gratis no crea imágenes).' : '';
-      return send(res, r.status, { error: `Gemini: ${msg.split('\n')[0]}${hint}` });
+      const msg = ((j.error && j.error.message) || r.statusText || '').split('\n')[0];
+      const friendly = r.status === 429
+        ? (/free_tier|billing|plan/i.test(JSON.stringify(j)) ? 'Tu clave de Gemini está en el plan gratis, que no crea imágenes. Activa la facturación del proyecto en Google AI Studio.' : 'Gemini está ocupado o llegaste al límite por minuto. Espera un momento e intenta de nuevo.')
+        : r.status === 400 && /API key/i.test(msg) ? 'La clave de Gemini no es válida. Revisa GEMINI_API_KEY en Vercel.'
+        : r.status === 403 ? 'La clave de Gemini no tiene permiso para este modelo. Revisa el proyecto en Google AI Studio.'
+        : `Gemini respondió: ${msg}`;
+      return send(res, r.status, { error: friendly });
     }
     const img = (j.candidates || []).flatMap((c) => (c.content && c.content.parts) || []).find((p) => p.inlineData);
     if (!img) return send(res, 502, { error: 'Gemini no devolvió imagen. Intenta de nuevo o cambia la toma.' });
