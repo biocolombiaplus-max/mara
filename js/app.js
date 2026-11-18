@@ -10,7 +10,7 @@
   const SHIP_STD = 14900;
   const SHIP_EXP = 24900;
   const MAIN_CITIES = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Envigado', 'Itagüí', 'Bello', 'Sabaneta', 'Chía', 'Soacha', 'Cajicá'];
-  const WHATSAPP = '573000000000';
+  const WHATSAPP = '573232086370';
 
   /* ---------------- Utilidades ---------------- */
   const $ = (s, el = document) => el.querySelector(s);
