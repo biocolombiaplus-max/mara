@@ -1,0 +1,22 @@
+{
+  "name": "MARA Originals",
+  "short_name": "MARA",
+  "description": "Moda y ropa deportiva original para mujer. Escríbenos por WhatsApp.",
+  "id": "/enlaces/",
+  "start_url": "/enlaces/?app=1",
+  "scope": "/enlaces/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0D1F5C",
+  "theme_color": "#0D1F5C",
+  "lang": "es-CO",
+  "icons": [
+    { "src": "app-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "app-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "app-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Escribir por WhatsApp", "short_name": "WhatsApp", "url": "https://wa.me/573232086370?text=Hola%20MARA%20Originals%20%F0%9F%92%97", "icons": [{ "src": "app-192.png", "sizes": "192x192" }] },
+    { "name": "Instagram", "short_name": "Instagram", "url": "https://www.instagram.com/mara_originals/", "icons": [{ "src": "app-192.png", "sizes": "192x192" }] }
+  ]
+}
