@@ -285,6 +285,7 @@
     const W = PRODUCTS.filter((p) => p.gender !== 'hombre');
     const best = W.filter((p) => p.tags.includes('bestseller'));
     const slides = [
+      { p: find('Short Pro 3" Mujer'), ci: 0, photo: 'img/productos/nike-pro-short-3/hero-nike-pro.webp', bg: 'linear-gradient(120deg,#9d1747 0%,#e23e7b 100%)', tag: 'Nike Pro · Rosa frambuesa', h: 'Hecho para<br><em>brillar.</em>', txt: 'El short Nike Pro 3" que todas quieren: compresión, tela Dri-FIT y la pretina más icónica. 100% original.', cta: ['Comprar ahora', '#/p/' + find('Short Pro 3" Mujer').slug], cta2: ['Ver bikers y shorts', '#/tienda?sub=shorts'], big: 'PRO' },
       { p: find('Conjunto Meridian Gym'), ci: 2, bg: 'linear-gradient(120deg,#e23e7b 0%,#ff7a8a 100%)', tag: 'Nueva colección', h: 'Fuerte.<br><em>Libre. Tú.</em>', txt: 'Leggings, tops y conjuntos de las mejores marcas, diseñados para moverte con confianza en cada entrenamiento.', cta: ['Comprar colección', '#/tienda?gender=mujer&new=1'], cta2: ['Ver conjuntos', '#/tienda?sub=conjuntos'], big: 'MARA' },
       { p: find('Leggings Zenvy Sujeción Suave'), ci: 0, bg: 'linear-gradient(120deg,#8b7ad8 0%,#c9a48b 100%)', tag: 'Yoga & Pilates', h: 'Suave como<br><em>tu flow.</em>', txt: 'Prendas tipo segunda piel en tonos tierra y pastel para tu práctica en el estudio o en casa.', cta: ['Comprar yoga', '#/tienda?sport=yoga'], cta2: ['Pilates', '#/tienda?sport=pilates'], big: 'FLOW' },
       { p: find('Clifton 10'), ci: 1, bg: 'linear-gradient(120deg,#1b1b1d 0%,#3a2a32 100%)', tag: 'Running mujer', h: 'Tu ritmo,<br><em>tus reglas.</em>', txt: 'Tenis y ropa de running pensados para la pisada y el cuerpo femenino: HOKA, Nike, ASICS y más.', cta: ['Comprar running', '#/tienda?gender=mujer&sport=running'], cta2: ['Outlet', '#/tienda?sale=1'], big: 'RUN' }
@@ -308,7 +309,7 @@
     <section class="hero" aria-roledescription="carrusel">
       <div class="hero__slides">
         ${slides.map((s, i) => `
-          <div class="slide ${i === 0 ? 'is-active' : ''}" data-slide="${i}">
+          <div class="slide ${i === 0 ? 'is-active' : ''} ${s.photo ? 'slide--photo' : ''}" data-slide="${i}">
             <div class="slide__bg" style="background:${s.bg}"></div>
             <span class="slide__big">${s.big}</span>
             <div class="slide__copy">
@@ -317,7 +318,9 @@
               <p>${s.txt}</p>
               <div class="slide__ctas"><a class="btn btn--light" href="${s.cta[1]}">${s.cta[0]}</a><a class="btn btn--ghost" style="color:#fff;box-shadow:inset 0 0 0 1.5px #fff" href="${s.cta2[1]}">${s.cta2[0]}</a></div>
             </div>
-            <a class="slide__art" href="#/p/${s.p.slug}" aria-label="${esc(s.p.brandName + ' ' + s.p.name)}">${media(s.p, s.ci, 0)}</a>
+            ${s.photo
+              ? `<a class="slide__photo" href="#/p/${s.p.slug}" aria-label="${esc(s.p.brandName + ' ' + s.p.name)}"><img src="${s.photo}" alt="${esc(s.p.brandName + ' ' + s.p.name)}" ${i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}><span class="slide__ia">Imagen referencial creada con IA</span></a>`
+              : `<a class="slide__art" href="#/p/${s.p.slug}" aria-label="${esc(s.p.brandName + ' ' + s.p.name)}">${media(s.p, s.ci, 0)}</a>`}
           </div>`).join('')}
       </div>
       <div class="hero__dots">${slides.map((_, i) => `<button class="${i === 0 ? 'is-active' : ''}" data-dot="${i}" aria-label="Diapositiva ${i + 1}"></button>`).join('')}</div>

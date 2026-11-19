@@ -72,8 +72,8 @@
     fucsia:  { name: 'Fucsia',       hex: '#e23e7b', a: '#e5467f', b: '#c02a62', c: '#ffffff', s: '#fff5f8', lace: '#fff' },
     coral:   { name: 'Coral',        hex: '#ff8a73', a: '#ff8f79', b: '#ef6a52', c: '#ffffff', s: '#fffaf8', lace: '#fff' },
     frambuesa: { name: 'Rosa frambuesa', hex: '#e5455f', a: '#e5455f', b: '#f06b9a', c: '#ffffff', s: '#fff5f8',
-      img: ['01-frontal', '02-angulo', '03-pretina', '04-logo', '05-campana'].map((f) => `img/productos/nike-pro-short-3/${f}.webp`),
-      thumb: ['01-frontal', '02-angulo', '03-pretina', '04-logo', '05-campana'].map((f) => `img/productos/nike-pro-short-3/${f}-sm.webp`) },
+      img: ['modelo-cuerpo-completo', 'modelo-de-cerca', 'modelo-frente', 'modelo-lado', 'modelo-espalda', 'modelo-pretina', 'modelo-detalle-espalda', 'modelo-logo', '01-frontal'].map((f) => `img/productos/nike-pro-short-3/${f}.webp`),
+      thumb: ['modelo-cuerpo-completo', 'modelo-de-cerca', 'modelo-frente', 'modelo-lado', 'modelo-espalda', 'modelo-pretina', 'modelo-detalle-espalda', 'modelo-logo', '01-frontal'].map((f) => `img/productos/nike-pro-short-3/${f}-sm.webp`) },
     cacao:   { name: 'Cacao',        hex: '#6b4a3a', a: '#6b4a3a', b: '#52382b', c: '#e6c3b3', s: '#f3ebe5' }
   };
 
