@@ -19,12 +19,12 @@
   ];
 
   const SPORTS = [
-    { id: 'training', name: 'Gym', bg: '#e23e7b' },
-    { id: 'yoga', name: 'Yoga', bg: '#8b7ad8' },
-    { id: 'running', name: 'Running', bg: '#ff6a4d' },
-    { id: 'pilates', name: 'Pilates', bg: '#c9a48b' },
-    { id: 'padel', name: 'Pádel & Tenis', bg: '#2f8f7a' },
-    { id: 'lifestyle', name: 'Athleisure', bg: '#1b1b1d' }
+    { id: 'training', name: 'Gym', bg: '#0D1F5C' },
+    { id: 'yoga', name: 'Yoga', bg: '#1B3A8A' },
+    { id: 'running', name: 'Running', bg: '#A87C34' },
+    { id: 'pilates', name: 'Pilates', bg: '#C9A04F' },
+    { id: 'padel', name: 'Pádel & Tenis', bg: '#13297A' },
+    { id: 'lifestyle', name: 'Athleisure', bg: '#0A1640' }
   ];
 
   // Tipo de prenda (subcategoría)

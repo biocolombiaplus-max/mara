@@ -71,7 +71,7 @@ body.is-admin { background: #f6f3f1; }
 .adm-task i { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: #e48a1d; color: #fff; font-style: normal; font-size: 13px; flex-shrink: 0; }
 .adm-task.is-ok { background: #edf7f0; color: var(--muted); font-weight: 500; text-decoration: line-through; }
 .adm-task.is-ok i { background: var(--ok); }
-.adm-cta { margin-top: 16px; display: flex; align-items: center; gap: 18px; padding: 22px 26px; border-radius: 16px; background: linear-gradient(120deg, #e23e7b, #8b7ad8); color: #fff; }
+.adm-cta { margin-top: 16px; display: flex; align-items: center; gap: 18px; padding: 22px 26px; border-radius: 16px; background: radial-gradient(120% 160% at 100% 0%, #1B3A8A 0%, #0D1F5C 50%, #0A1640 100%); border: 1px solid rgba(201, 160, 79, .45); color: #fff; }
 .adm-cta > svg { width: 42px; height: 42px; }
 .adm-cta b { display: block; font-family: var(--head); font-size: 26px; text-transform: uppercase; font-style: italic; }
 .adm-cta span { opacity: .92; font-size: 14px; }
@@ -270,3 +270,12 @@ body.is-admin { background: #f6f3f1; }
 
 .adm-logo { flex-direction: column; align-items: flex-start; gap: 6px; }
 .adm-logo img { height: 64px; width: auto; }
+
+/* Identidad azul marino + dorado */
+.adm-side nav a.is-on { background: linear-gradient(135deg, #E9CB86, #C9A04F 55%, #A87C34); color: #0A1640; }
+.adm-logo small { color: #F2D899; }
+.adm-login { background: radial-gradient(circle at 20% 15%, rgba(201, 160, 79, .25), transparent 45%), radial-gradient(circle at 85% 85%, rgba(27, 58, 138, .35), transparent 50%), #0A1640; }
+.adm-login__icon { background: linear-gradient(135deg, #E9CB86, #C9A04F 55%, #A87C34); color: #0A1640; }
+.adm-kpi:first-child { background: #0A1640; border-color: #0A1640; }
+.adm-kpi:first-child b { color: #F2D899; }
+.adm-cta b { color: #F2D899; }

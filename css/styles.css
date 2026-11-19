@@ -2,16 +2,20 @@
    MARA Sport · Estilos
    ========================================================================= */
 :root {
-  --ink: #141114;
-  --ink-2: #2a2a2e;
+  --ink: #0A1640;
+  --ink-2: #2A3352;
   --muted: #6b6b72;
-  --line: #ebe3df;
+  --line: #E6E0D4;
   --bg: #ffffff;
-  --soft: #f7f2ef;
-  --soft-2: #efe6e1;
-  --accent: #e23e7b;
+  --soft: #F5F2EC;
+  --soft-2: #ECE6DA;
+  --accent: #9C7628;
+  --gold: #C9A04F;
+  --gold-l: #F2D899;
+  --navy: #0D1F5C;
+  --navy-2: #1B3A8A;
   --accent-ink: #ffffff;
-  --volt: #ffc4d8;
+  --volt: #F2D899;
   --sale: #e3262f;
   --ok: #138a46;
   --radius: 14px;
@@ -209,7 +213,7 @@ p { margin: 0; }
 .quick::-webkit-scrollbar { display: none; }
 .chip { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 18px; border-radius: 999px; background: var(--soft); font-weight: 600; font-size: 14px; transition: .2s; border: 1.5px solid transparent; }
 .chip:hover { background: var(--ink); color: #fff; }
-.chip--volt { background: var(--volt); color: #7a1840; }
+.chip--volt { background: linear-gradient(135deg, #F2D899, #C9A04F); color: #0A1640; }
 .chip.is-on { background: var(--ink); color: #fff; }
 
 /* Barra de confianza */
@@ -338,7 +342,7 @@ p { margin: 0; }
 .score b { font-family: var(--head); font-size: 72px; line-height: 1; }
 
 /* Club / newsletter band */
-.club { border-radius: 20px; background: linear-gradient(120deg, #e23e7b, #8b7ad8); color: #fff; padding: 48px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; }
+.club { border-radius: 20px; background: radial-gradient(120% 140% at 85% 0%, #1B3A8A 0%, #0D1F5C 45%, #0A1640 100%); border: 1px solid rgba(201, 160, 79, .45); color: #fff; padding: 48px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; }
 .club h2 { font-size: clamp(40px, 5vw, 68px); font-style: italic; }
 .club ul { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 6px; }
 .club li::before { content: '✓ '; font-weight: 800; }
@@ -718,3 +722,29 @@ p { margin: 0; }
 .footer .logo__img { height: 76px; }
 .drawer .logo__img { height: 44px; }
 @media (max-width: 960px) { .header .logo__img { height: 42px; } }
+
+/* ---------- Identidad MARA Originals: azul marino + dorado ---------- */
+.btn--accent { background: linear-gradient(135deg, #E9CB86 0%, #C9A04F 55%, #A87C34 100%); color: #0A1640; box-shadow: 0 6px 18px rgba(168, 124, 52, .25); }
+.btn--accent:hover { background: linear-gradient(135deg, #F2D899 0%, #D4AC5C 55%, #B38840 100%); box-shadow: 0 10px 26px rgba(168, 124, 52, .35); }
+.badge { background: linear-gradient(135deg, #E9CB86, #C9A04F); color: #0A1640; }
+.announce b, .announce__track b { color: var(--gold-l); }
+.club .eyebrow, .flash .eyebrow { color: var(--gold-l) !important; }
+.club h2, .flash h2 em, .slide__copy h1 em { color: var(--gold-l); }
+.club .btn--dark { background: linear-gradient(135deg, #E9CB86, #C9A04F 55%, #A87C34); color: #0A1640; }
+.footer { background: #0A1640; }
+.footer h4, .footer__trust b { color: var(--gold-l); }
+.footer__trust { border-bottom-color: rgba(201, 160, 79, .25); }
+.footer__pay, .footer__legal { border-top-color: rgba(201, 160, 79, .2); }
+.social a:hover, .admin-entry:hover { background: var(--gold); border-color: var(--gold); color: #0A1640; }
+.tag-b--hot { background: linear-gradient(135deg, #F2D899, #C9A04F); color: #0A1640; }
+.tag-b--new { background: #0D1F5C; }
+.flash { background: radial-gradient(120% 140% at 100% 0%, #1B3A8A 0%, #0D1F5C 45%, #0A1640 100%); border: 1px solid rgba(201, 160, 79, .4); }
+.countdown div { background: rgba(201, 160, 79, .14); border: 1px solid rgba(201, 160, 79, .3); }
+.countdown b { color: var(--gold-l); }
+.mainnav > .nav-item > a::after { background: linear-gradient(90deg, #C9A04F, #F2D899); }
+.logo__mark::after { background: var(--gold); }
+.search input:focus { border-color: var(--navy); }
+.ship-bar__track i { background: linear-gradient(90deg, #A87C34, #F2D899); }
+.sizes button.is-on, .fsizes button.is-on, .chip.is-on, .steps span.is-on { background: #0D1F5C; border-color: #0D1F5C; }
+.radio-card:has(input:checked) { border-color: #0D1F5C; box-shadow: inset 0 0 0 1px #0D1F5C; }
+.whatsapp { box-shadow: 0 10px 30px rgba(37, 211, 102, .3), 0 0 0 2px rgba(201, 160, 79, .35); }

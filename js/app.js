@@ -285,19 +285,19 @@
     const W = PRODUCTS.filter((p) => p.gender !== 'hombre');
     const best = W.filter((p) => p.tags.includes('bestseller'));
     const slides = [
-      { p: find('Short Pro 3" Mujer'), ci: 0, photo: 'img/productos/nike-pro-short-3/hero-nike-pro.webp', bg: 'linear-gradient(120deg,#9d1747 0%,#e23e7b 100%)', tag: 'Nike Pro · Rosa frambuesa', h: 'Hecho para<br><em>brillar.</em>', txt: 'El short Nike Pro 3" que todas quieren: compresión, tela Dri-FIT y la pretina más icónica. 100% original.', cta: ['Comprar ahora', '#/p/' + find('Short Pro 3" Mujer').slug], cta2: ['Ver bikers y shorts', '#/tienda?sub=shorts'], big: 'PRO' },
-      { p: find('Conjunto Meridian Gym'), ci: 2, bg: 'linear-gradient(120deg,#e23e7b 0%,#ff7a8a 100%)', tag: 'Nueva colección', h: 'Fuerte.<br><em>Libre. Tú.</em>', txt: 'Leggings, tops y conjuntos de las mejores marcas, diseñados para moverte con confianza en cada entrenamiento.', cta: ['Comprar colección', '#/tienda?gender=mujer&new=1'], cta2: ['Ver conjuntos', '#/tienda?sub=conjuntos'], big: 'MARA' },
-      { p: find('Leggings Zenvy Sujeción Suave'), ci: 0, bg: 'linear-gradient(120deg,#8b7ad8 0%,#c9a48b 100%)', tag: 'Yoga & Pilates', h: 'Suave como<br><em>tu flow.</em>', txt: 'Prendas tipo segunda piel en tonos tierra y pastel para tu práctica en el estudio o en casa.', cta: ['Comprar yoga', '#/tienda?sport=yoga'], cta2: ['Pilates', '#/tienda?sport=pilates'], big: 'FLOW' },
-      { p: find('Clifton 10'), ci: 1, bg: 'linear-gradient(120deg,#1b1b1d 0%,#3a2a32 100%)', tag: 'Running mujer', h: 'Tu ritmo,<br><em>tus reglas.</em>', txt: 'Tenis y ropa de running pensados para la pisada y el cuerpo femenino: HOKA, Nike, ASICS y más.', cta: ['Comprar running', '#/tienda?gender=mujer&sport=running'], cta2: ['Outlet', '#/tienda?sale=1'], big: 'RUN' }
+      { p: find('Short Pro 3" Mujer'), ci: 0, photo: 'img/productos/nike-pro-short-3/hero-nike-pro.webp', bg: 'linear-gradient(120deg,#0A1640 0%,#1B3A8A 100%)', tag: 'Nike Pro · Rosa frambuesa', h: 'Hecho para<br><em>brillar.</em>', txt: 'El short Nike Pro 3" que todas quieren: compresión, tela Dri-FIT y la pretina más icónica. 100% original.', cta: ['Comprar ahora', '#/p/' + find('Short Pro 3" Mujer').slug], cta2: ['Ver bikers y shorts', '#/tienda?sub=shorts'], big: 'PRO' },
+      { p: find('Conjunto Meridian Gym'), ci: 2, bg: 'linear-gradient(120deg,#0D1F5C 0%,#2A4BA8 100%)', tag: 'Nueva colección', h: 'Fuerte.<br><em>Libre. Tú.</em>', txt: 'Leggings, tops y conjuntos de las mejores marcas, diseñados para moverte con confianza en cada entrenamiento.', cta: ['Comprar colección', '#/tienda?gender=mujer&new=1'], cta2: ['Ver conjuntos', '#/tienda?sub=conjuntos'], big: 'MARA' },
+      { p: find('Leggings Zenvy Sujeción Suave'), ci: 0, bg: 'linear-gradient(120deg,#8C6A2B 0%,#C9A04F 100%)', tag: 'Yoga & Pilates', h: 'Suave como<br><em>tu flow.</em>', txt: 'Prendas tipo segunda piel en tonos tierra y pastel para tu práctica en el estudio o en casa.', cta: ['Comprar yoga', '#/tienda?sport=yoga'], cta2: ['Pilates', '#/tienda?sport=pilates'], big: 'FLOW' },
+      { p: find('Clifton 10'), ci: 1, bg: 'linear-gradient(120deg,#0A1640 0%,#2A3352 100%)', tag: 'Running mujer', h: 'Tu ritmo,<br><em>tus reglas.</em>', txt: 'Tenis y ropa de running pensados para la pisada y el cuerpo femenino: HOKA, Nike, ASICS y más.', cta: ['Comprar running', '#/tienda?gender=mujer&sport=running'], cta2: ['Outlet', '#/tienda?sale=1'], big: 'RUN' }
     ];
     const sale = W.filter((p) => p.compareAt);
     const cats = [
-      { sub: 'leggings', bg: '#1b1b1d', p: find('Leggings One Tiro Alto 7/8'), ci: 1 },
-      { sub: 'tops', bg: '#e23e7b', p: find('Top Swoosh Soporte Medio'), ci: 2 },
-      { sub: 'conjuntos', bg: '#a7b8a0', p: find('Conjunto Yoga Studio'), ci: 1 },
-      { sub: 'shorts', bg: '#c9a48b', p: find('Biker One 8"'), ci: 2 },
-      { sub: 'chaquetas', bg: '#8b7ad8', p: find('Buzo Hoodie Essentials'), ci: 0 },
-      { sub: 'tenis', bg: '#ff8a73', p: find('Samba OG'), ci: 1 }
+      { sub: 'leggings', bg: '#0A1640', p: find('Leggings One Tiro Alto 7/8'), ci: 1 },
+      { sub: 'tops', bg: '#1B3A8A', p: find('Top Swoosh Soporte Medio'), ci: 2 },
+      { sub: 'conjuntos', bg: 'linear-gradient(160deg,#D9B56A,#A87C34)', p: find('Conjunto Yoga Studio'), ci: 1 },
+      { sub: 'shorts', bg: '#13297A', p: find('Biker One 8"'), ci: 2 },
+      { sub: 'chaquetas', bg: 'linear-gradient(160deg,#C9A04F,#8C6A2B)', p: find('Buzo Hoodie Essentials'), ci: 0 },
+      { sub: 'tenis', bg: '#0D1F5C', p: find('Samba OG'), ci: 1 }
     ];
     const revs = [
       { n: 'Laura M.', c: 'Medellín', t: 'Los leggings Meridian son lo más cómodo que he tenido. No transparentan nada al hacer sentadillas y la talla fue exacta.', p: 'Leggings Meridian' },
@@ -370,14 +370,14 @@
 
     <section class="section container">
       <div class="split">
-        <a class="promo" href="#/tienda?sub=conjuntos" style="background:#a7b8a0">
+        <a class="promo" href="#/tienda?sub=conjuntos" style="background:radial-gradient(120% 120% at 80% 10%,#1B3A8A,#0A1640)">
           ${media(find('Conjunto Studio Seamless Top + Leggings'), 0, 0)}
           <span class="eyebrow" style="color:#fff">Combina sin pensarlo</span>
           <h3>Conjuntos que esculpen</h3>
           <p>Lleva el set completo y obtén 15% OFF adicional con el código <b>MARAFIT15</b>.</p>
           <span class="btn btn--light" style="align-self:flex-start">Comprar conjuntos</span>
         </a>
-        <a class="promo" href="#/tienda?sport=padel" style="background:#2f8f7a">
+        <a class="promo" href="#/tienda?sport=padel" style="background:linear-gradient(140deg,#D9B56A,#8C6A2B)">
           ${media(find('Falda-short Court Dri-FIT'), 2, 0)}
           <span class="eyebrow" style="color:#fff">Pádel & Tenis</span>
           <h3>Juega con estilo</h3>
@@ -1352,8 +1352,8 @@
   function loadAdmin() {
     if (window.MaraAdmin) return Promise.resolve();
     if (!adminLoading) adminLoading = new Promise((ok, bad) => {
-      const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'css/admin.css?v=4'; document.head.appendChild(css);
-      const js = document.createElement('script'); js.src = 'js/admin.js?v=4'; js.onload = ok; js.onerror = bad; document.body.appendChild(js);
+      const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'css/admin.css?v=5'; document.head.appendChild(css);
+      const js = document.createElement('script'); js.src = 'js/admin.js?v=5'; js.onload = ok; js.onerror = bad; document.body.appendChild(js);
     });
     return adminLoading;
   }
